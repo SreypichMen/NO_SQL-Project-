@@ -76,7 +76,28 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                  <v-row>
+
+                  </v-row>
              </v-container>
+        </div>
+        <div>
+            <v-data-table
+            :headers="headers"
+            :items="products"
+            :items-per-page="5"
+            :search="search"
+            class="elevation-1 py-3"
+        >
+        <template v-slot:item.status="{ item }">
+            <v-chip
+              :color="getColor(item.status)"
+              dark
+            >
+              {{ item.status }}
+            </v-chip>
+          </template>
+    </v-data-table>
         </div>
     </div>
 </template>
