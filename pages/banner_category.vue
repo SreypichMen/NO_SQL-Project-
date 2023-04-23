@@ -81,23 +81,81 @@
                   </v-row>
              </v-container>
         </div>
-        <div>
-            <v-data-table
-            :headers="headers"
-            :items="products"
-            :items-per-page="5"
-            :search="search"
-            class="elevation-1 py-3"
+        <div style="padding:12px">
+          <v-data-table
+          :headers="headers"
+          :items="products"
+          :items-per-page="5"
+          :search="search"
+          class="elevation-1"
+       
         >
-        <template v-slot:item.status="{ item }">
-            <v-chip
-              :color="getColor(item.status)"
-              dark
-            >
-              {{ item.status }}
-            </v-chip>
-          </template>
-    </v-data-table>
+       
+        <template v-slot:item.action="{ item }" >
+          <div class="p-2" >
+            <v-row class="pl-2">
+                <v-btn icon
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon color="green">
+                    mdi-pencil
+                  </v-icon>
+                </v-btn>
+            
+                <v-btn icon
+                    v-bind="attrs"
+                    v-on="on">
+                  <v-icon color="red">
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+            </v-row>
+          </div>
+        </template>
+        <v-row>
+          <v-col align="center" >
+            <template v-slot:header.id="{ header }">
+         {{ header.text }}
+         </template>
+         </v-col>
+         <v-col align="center"> 
+           <template v-slot:header.category="{ header }">
+             {{ header.text }}
+            </template>
+         </v-col>
+ 
+        <!-- <template v-slot:header.movie="{ header }">
+            {{ header.text }}
+         </template> -->
+         <!-- 
+         <template v-slot:header.vendor_shop="{ header }">
+       {{ header.text }}
+         </template> -->
+        
+         <!-- <template v-slot:header.address="{ header }">
+         {{ header.text }}
+         </template>
+         <template v-slot:header.phone_number="{ header }">
+         {{ header.text }}
+         </template>
+         <template v-slot:header.email="{ header }">
+           {{ header.text }}
+         </template> -->
+         <v-col align="end">  
+           <template v-slot:item.status="{ item }">
+           <v-chip
+             :color="getColor(item.status)"
+             dark
+           >
+             {{ item.status }}
+           </v-chip>
+         </template>
+       </v-col>
+       
+        </v-row>
+       
+      </v-data-table>
         </div>
     </div>
 </template>
@@ -106,24 +164,36 @@
     data() {
       return {
        
-        headers: [
+         headers: [
           {
             text: 'ID',
             align: 'start',
             sortable: false,
             value: 'id',
-            class: 'light-green lighten-2',
+            class: "green green-darken-1 white--text",
+           
+          },
+          // { text: 'Vendor Shop', value: 'vendor_shop', class: "green green-darken-1 white--text", },
+          // { text: 'Address', value: 'address', class: "green green-darken-1 white--text" },
+          // { text: 'Email Address', value: 'email', class: "green green-darken-1 white--text" },
+          // { text: 'Movie Category Name ', value: 'movie', class: "green green-darken-1 white--text" },
+          { text: 'Banner Category Name', value: 'category', class: "green green-darken-1 white--text " ,  },
+          { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },],
+        // icons: [
+        //   {
+        //     icons: 'mdi-card',
+        //   },
+        // ],
+        products: [
+          {
+            id: 'ban-001',
+           
+            category: 'Home Page',
           },
           {
-            text: 'Category Name',
-            value: 'shop_name',
-            class: 'light-green lighten-2',
-          },
-          { text: 'category Slug', value: 'name', class: 'light-green lighten-2' },   
-        ],
-        icons: [
-          {
-            icons: 'mdi-card',
+            id: 'ban-002',
+          
+            category: 'Recently Added',
           },
         ],
   
