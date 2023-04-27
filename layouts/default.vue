@@ -91,6 +91,11 @@
             <v-list-item-title  ><v-icon class="mr-3">mdi-select-group</v-icon>Category</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item router exact to="/manage_movie_subcate" >
+          <v-list-item-content >
+            <v-list-item-title  ><v-icon class="mr-3">mdi-shape-plus</v-icon>Subcategory</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-list-item router exact to="/manage_movie">
           <v-list-item-content  >

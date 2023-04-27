@@ -98,7 +98,6 @@
           </div>
           <div class="most_viwed">
             <div class="mt-2"> 
-
               <v-icon color="#008000" style="width: 30px; height: 30px">mdi-decagram</v-icon>
               <h5 style="position:relative; bottom: 25px; left: 12px;color: white; font-weight:bold">4</h5>
             </div>

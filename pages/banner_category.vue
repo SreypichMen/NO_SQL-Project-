@@ -94,6 +94,7 @@
         <template v-slot:item.action="{ item }" >
           <div class="p-2" >
             <v-row class="pl-2">
+              
                 <v-btn icon
                   v-bind="attrs"
                   v-on="on"
@@ -125,23 +126,6 @@
             </template>
          </v-col>
  
-        <!-- <template v-slot:header.movie="{ header }">
-            {{ header.text }}
-         </template> -->
-         <!-- 
-         <template v-slot:header.vendor_shop="{ header }">
-       {{ header.text }}
-         </template> -->
-        
-         <!-- <template v-slot:header.address="{ header }">
-         {{ header.text }}
-         </template>
-         <template v-slot:header.phone_number="{ header }">
-         {{ header.text }}
-         </template>
-         <template v-slot:header.email="{ header }">
-           {{ header.text }}
-         </template> -->
          <v-col align="end">  
            <template v-slot:item.status="{ item }">
            <v-chip

@@ -91,8 +91,8 @@
        
         >
         <template v-slot:item.image="{ item }">
-          <div class="p-2">
-            <v-img :src="item.image_url" :alt="item.name" height="100px" width="100px"></v-img>
+          <div class="pa-1">
+            <v-img :src="item.image" :alt="item.name" height="70px" width="70px" style="border-radius: 10px; "></v-img>
           </div>
         </template>
         <template v-slot:item.action="{ item }" >
@@ -136,20 +136,7 @@
         <template v-slot:header.image="{ header }">
           {{ header.text }}
        </template>
-         <!-- 
-         <template v-slot:header.vendor_shop="{ header }">
-       {{ header.text }}
-         </template> -->
-        
-         <!-- <template v-slot:header.address="{ header }">
-         {{ header.text }}
-         </template>
-         <template v-slot:header.phone_number="{ header }">
-         {{ header.text }}
-         </template>
-         <template v-slot:header.email="{ header }">
-           {{ header.text }}
-         </template> -->
+       
          <v-col align="end">  
            <template v-slot:item.status="{ item }">
            <v-chip
@@ -187,7 +174,7 @@ export default {
           // { text: 'Email Address', value: 'email', class: "green green-darken-1 white--text" },
           // { text: 'Phone Number', value: 'phone_number', class: "green green-darken-1 white--text" },
           { text: 'Movie Category Name ', value: 'movie', class: "green green-darken-1 white--text" },
-           { text: 'Banner Image', value: 'image_url', class: "green green-darken-1 white--text" },
+          { text: 'Banner Image', value: 'image', class: "green green-darken-1 white--text" },
           { text: 'Banner Category', value: 'category', class: "green green-darken-1 white--text " ,  },
           { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },],
         // icons: [
@@ -198,13 +185,13 @@ export default {
         products: [
           {
             id: 'ban-001',
-            image_url:'',
+            image:'https://th.bing.com/th/id/OIP.Mir4HQdguOeNR8uuBm3jmQHaFo?pid=ImgDet&rs=1',
             category: 'Home Page',
             movie:'K-Drama'
           },
           {
             id: 'ban-002',
-            image_url:'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRo-EyDRbsU9cdL-jbF_5uP9lGIR6lsCiwt0CUgRE0ZiK85mdha',
+            image:'https://th.bing.com/th/id/OIP.Mir4HQdguOeNR8uuBm3jmQHaFo?pid=ImgDet&rs=1',
             movie:'Movie',
             category: 'Recently Added',
           },

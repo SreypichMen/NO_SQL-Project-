@@ -3,8 +3,8 @@
         <div>
             <v-container>
                 <v-row>
-                  <h2 class="ml-3" style="color: white">
-                    Manage Subscription 
+                  <h2 style="color: white; margin-left: 12px">
+                    Manage Movie Subcategory
                   </h2>
                   </v-row>
                   <v-row>
@@ -90,14 +90,11 @@
           class="elevation-1"
        
         >
-        <template v-slot:item.image="{ item }">
-          <div class="p-4">
-            <v-img :src="item.image" :alt="item.name" height="70px" width="70px" style="border-radius: 10px; "></v-img>
-          </div>
-        </template>
+       
         <template v-slot:item.action="{ item }" >
           <div class="p-2" >
             <v-row class="pl-2">
+              
                 <v-btn icon
                   v-bind="attrs"
                   v-on="on"
@@ -123,7 +120,6 @@
          {{ header.text }}
          </template>
          </v-col>
-      
        
          <v-col align="end">  
            <template v-slot:item.status="{ item }">
@@ -139,12 +135,11 @@
         </v-row>
        
       </v-data-table>
-             </v-container>
         </div>
     </div>
 </template>
 <script>
-export default {
+ export default {
     data() {
       return {
        
@@ -155,25 +150,27 @@ export default {
             sortable: false,
             value: 'id',
             class: "green green-darken-1 white--text",
+           
           },
-          { text: 'Package Name', value: 'name', class: "green green-darken-1 white--text" },
-          { text: 'Price', value: 'price', class: "green green-darken-1 white--text" },
-          { text: 'Description', value: 'des', class: "green green-darken-1 white--text " ,  },
-          { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },
-        ],
-      
+          // { text: 'Vendor Shop', value: 'vendor_shop', class: "green green-darken-1 white--text", },
+          // { text: 'Address', value: 'address', class: "green green-darken-1 white--text" },
+          // { text: 'Email Address', value: 'email', class: "green green-darken-1 white--text" },
+          // { text: 'Movie Category Name ', value: 'movie', class: "green green-darken-1 white--text" },
+         
+          { text: 'Subcategory', value: 'subcategory', class: "green green-darken-1 white--text " ,  },
+          { text: 'Category', value: 'category', class: "green green-darken-1 white--text " , },
+          { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },],
+       
         products: [
           {
-            id: 'Sub-001',
-            name:'Basic Plan',
-            price: '5 ',
-            des: "Good for Basic Plan"
+            id: 'ban-001',
+            subcategory: "Korean",
+            category: 'Movie',
           },
           {
-            id: 'Sub-002',
-            name:'Saving Plan',
-            price: '10 ',
-            des: "Good for Beginner"
+            id: 'ban-002',
+            subcategory: "K-drama",
+            category: 'Dramas',
           },
         ],
   
@@ -192,12 +189,12 @@ export default {
     
       }
     }
+  
 </script>
-
 <style scoped>
 .dashboard{
     color: white;
     margin-left: 50px;
     margin-right: 50px;
-  }
+}
 </style>
