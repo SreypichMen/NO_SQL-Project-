@@ -40,20 +40,59 @@
                           </template>
                           <v-card>
                             <v-card-title>
-                              <span class="text-h5">Add category</span>
+                              <span class="text-h5">Add Banner </span>
                             </v-card-title>
                             <v-card-text>
                               <v-container>
                                 <v-row>
                                   <v-col>
-                                    <v-text-field
-                                      label="Category Name" 
+                                    
+                                    <v-select
+                                      :items="cates" 
+                                      v-model="cate"
+                                      item-text="name"
+                                      item-value="id"
+                                      label="Movie Title"
                                       required
-                                    ></v-text-field>
+                                    ></v-select>
                                   </v-col>
                                   <v-col>
                                       <v-text-field
-                                        label="Category Slug"
+                                        label="Type"
+                                        required
+                                      ></v-text-field>
+                                    </v-col>
+                                  </v-row>
+                                  <v-row>
+                                  <v-col>
+                                    <v-select
+                                      :items="cates" 
+                                      v-model="cate"
+                                      item-text="Banner_Cate"
+                                      item-value="id"
+                                      label="Banner Category"
+                                      required
+                                    ></v-select>
+                                  </v-col>
+                                  <v-col>
+                                    <!-- <v-text-field
+                                        label="Description"
+                                        required
+                                      ></v-text-field> -->
+                                      <v-file-input
+                                          accept="image/png, image/jpeg, image/bmp"
+                                          placeholder="Pick an image"
+                                          prepend-icon="mdi-camera"
+                                          label="Image" 
+                                          v-model="image"
+                                        ></v-file-input>
+                                  </v-col>
+                                
+                                  </v-row>
+                                  <v-row>
+                                    <v-col>
+                                      <v-text-field
+                                        label="Description"
                                         required
                                       ></v-text-field>
                                     </v-col>
@@ -98,15 +137,7 @@
         <template v-slot:item.action="{ item }" >
           <div class="p-2" >
             <v-row class="pl-2">
-                <v-btn icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon color="green">
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-            
+              <editComponent/>
                 <v-btn icon
                     v-bind="attrs"
                     v-on="on">
@@ -123,19 +154,7 @@
          {{ header.text }}
          </template>
          </v-col>
-         <v-col align="center"> 
-           <template v-slot:header.category="{ header }">
-             {{ header.text }}
-            </template>
-         </v-col>
- 
-        <template v-slot:header.movie="{ header }">
-            {{ header.text }}
-         </template>
-         
-        <template v-slot:header.image="{ header }">
-          {{ header.text }}
-       </template>
+      
        
          <v-col align="end">  
            <template v-slot:item.status="{ item }">
@@ -156,7 +175,11 @@
     </div>
 </template>
 <script>
+import editComponent from '~/components/editComponent.vue';
 export default {
+  components:{
+    editComponent
+  },
     data() {
       return {
        
@@ -173,7 +196,9 @@ export default {
           // { text: 'Address', value: 'address', class: "green green-darken-1 white--text" },
           // { text: 'Email Address', value: 'email', class: "green green-darken-1 white--text" },
           // { text: 'Phone Number', value: 'phone_number', class: "green green-darken-1 white--text" },
-          { text: 'Movie Category Name ', value: 'movie', class: "green green-darken-1 white--text" },
+          { text: 'Title ', value: 'title', class: "green green-darken-1 white--text" },
+          { text: 'Type', value: 'type', class: "green green-darken-1 white--text" },
+          { text: 'Description', value: 'des', class: "green green-darken-1 white--text" },
           { text: 'Banner Image', value: 'image', class: "green green-darken-1 white--text" },
           { text: 'Banner Category', value: 'category', class: "green green-darken-1 white--text " ,  },
           { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },],
@@ -185,16 +210,22 @@ export default {
         products: [
           {
             id: 'ban-001',
-            image:'https://th.bing.com/th/id/OIP.Mir4HQdguOeNR8uuBm3jmQHaFo?pid=ImgDet&rs=1',
+            title: 'The Glory',
+            type: 'Revange',
+            des:'After becoming a primary school teacher, she takes in the son of the man who tormented her the most to enact her vengeance.',
+            image:'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRNF8dnUiY8ad1Z9-QRGPoRpqYjvwiVbLHkMcS5SO5h9Wm5SEy3',
             category: 'Home Page',
             movie:'K-Drama'
           },
-          {
-            id: 'ban-002',
-            image:'https://th.bing.com/th/id/OIP.Mir4HQdguOeNR8uuBm3jmQHaFo?pid=ImgDet&rs=1',
-            movie:'Movie',
-            category: 'Recently Added',
-          },
+          // {
+          //   id: 'ban-002',
+          //   title: 'The Glory',
+          //   type: 'Revange',
+          //   des:'After becoming a primary school teacher, she takes in the son of the man who tormented her the most to enact her vengeance.',
+          //   image:'https://th.bing.com/th/id/OIP.Mir4HQdguOeNR8uuBm3jmQHaFo?pid=ImgDet&rs=1',
+          //   category: 'Home Page',
+          //   movie:'K-Drama'
+          // },
         ],
   
         dialog: false,

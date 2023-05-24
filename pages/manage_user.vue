@@ -24,55 +24,7 @@
                     </v-col>
                     <v-col align="end" style="margin-top: 18px; margin-right: 12px">
                       <v-row justify="end">
-                        <v-dialog v-model="dialog" persistent max-width="600px">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              v-bind="attrs"
-                              v-on="on"
-                              style="
-                                background-image: linear-gradient(  to top,#48c6ef 0%,   #6f86d6 100%  );
-                                color: whitesmoke !important;
-                                margin-left: 40px;
-                              "
-                            >
-                              <h3>ADD</h3>
-                            </v-btn>
-                          </template>
-                          <v-card>
-                            <v-card-title>
-                              <span class="text-h5">Add category</span>
-                            </v-card-title>
-                            <v-card-text>
-                              <v-container>
-                                <v-row>
-                                  <v-col>
-                                    <v-text-field
-                                      label="Category Name" 
-                                      required
-                                    ></v-text-field>
-                                  </v-col>
-                                  <v-col>
-                                      <v-text-field
-                                        label="Category Slug"
-                                        required
-                                      ></v-text-field>
-                                    </v-col>
-                                  </v-row>
-                                
-                              </v-container>
-                              <!-- <small>*indicates required field</small> -->
-                            </v-card-text>
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn color="blue darken-1" text @click="dialog = false">
-                                Cancel
-                              </v-btn>
-                              <v-btn  color="blue darken-1" text >
-                                ADD
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-dialog>
+                        
                       </v-row>
                     </v-col>
                   </v-row>
@@ -98,22 +50,17 @@
         <template v-slot:item.action="{ item }" >
           <div class="p-2" >
             <v-row class="pl-2">
-                <v-btn icon
+                <v-btn outlined
                   v-bind="attrs"
                   v-on="on"
+                  color="red"
                 >
-                  <v-icon color="green">
-                    mdi-pencil
-                  </v-icon>
+                Block
+                  <!-- <v-icon color="red">
+                    mdi-cancel
+                  </v-icon> -->
                 </v-btn>
-            
-                <v-btn icon
-                    v-bind="attrs"
-                    v-on="on">
-                  <v-icon color="red">
-                    mdi-delete
-                  </v-icon>
-                </v-btn>
+          
             </v-row>
           </div>
         </template>

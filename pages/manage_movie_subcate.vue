@@ -40,22 +40,26 @@
                           </template>
                           <v-card>
                             <v-card-title>
-                              <span class="text-h5">Add category</span>
+                              <span class="text-h5">Add Subcategory</span>
                             </v-card-title>
                             <v-card-text>
                               <v-container>
                                 <v-row>
                                   <v-col>
                                     <v-text-field
-                                      label="Category Name" 
+                                      label="Subcategory Name" 
                                       required
                                     ></v-text-field>
                                   </v-col>
                                   <v-col>
-                                      <v-text-field
-                                        label="Category Slug"
-                                        required
-                                      ></v-text-field>
+                                    <v-select
+                                      :items="cates" 
+                                      v-model="cate"
+                                      item-text="name"
+                                      item-value="id"
+                                      label="Select Category"
+                                      required
+                                    ></v-select>
                                     </v-col>
                                   </v-row>
                                 
@@ -95,15 +99,7 @@
           <div class="p-2" >
             <v-row class="pl-2">
               
-                <v-btn icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon color="green">
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-            
+           <editComponent/>
                 <v-btn icon
                     v-bind="attrs"
                     v-on="on">
@@ -139,16 +135,18 @@
     </div>
 </template>
 <script>
+import editComponent from '~/components/editComponent.vue'
  export default {
+  components: { editComponent },
     data() {
       return {
-       
+      
          headers: [
           {
             text: 'ID',
             align: 'start',
             sortable: false,
-            value: 'id',
+            value: '_id',
             class: "green green-darken-1 white--text",
            
           },
@@ -157,21 +155,21 @@
           // { text: 'Email Address', value: 'email', class: "green green-darken-1 white--text" },
           // { text: 'Movie Category Name ', value: 'movie', class: "green green-darken-1 white--text" },
          
-          { text: 'Subcategory', value: 'subcategory', class: "green green-darken-1 white--text " ,  },
-          { text: 'Category', value: 'category', class: "green green-darken-1 white--text " , },
+          { text: 'Subcategory', value: 'Subcategory_name', class: "green green-darken-1 white--text " ,  },
+          { text: 'Category', value: 'Category.Category_name', class: "green green-darken-1 white--text " , },
           { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },],
        
         products: [
-          {
-            id: 'ban-001',
-            subcategory: "Korean",
-            category: 'Movie',
-          },
-          {
-            id: 'ban-002',
-            subcategory: "K-drama",
-            category: 'Dramas',
-          },
+          // {
+          //   id: 'ban-001',
+          //   subcategory: "Korean",
+          //   category: 'Movie',
+          // },
+          // {
+          //   id: 'ban-002',
+          //   subcategory: "K-drama",
+          //   category: 'Dramas',
+          // },
         ],
   
         dialog: false,
@@ -183,12 +181,32 @@
         ],
       }
     },
+     created() {
+      this.getSubCategoryData();
+  },
    
     methods: {
-    
-    
-      }
-    }
+    getSubCategoryData(){
+      const axios = require('axios');
+      let products=[]
+            axios
+                .get(`http://localhost:3001/api/movie/subcategory/`)
+                .then((res) => {
+               
+                  this.products= res.data
+                  console.log(this.products)
+            
+                })
+                .catch((error) => {
+                console.log(error.response)
+              
+                })
+          
+            },
+
+        
+     }
+     }
   
 </script>
 <style scoped>

@@ -51,12 +51,7 @@
                                       required
                                     ></v-text-field>
                                   </v-col>
-                                  <v-col>
-                                      <v-text-field
-                                        label="Category Slug"
-                                        required
-                                      ></v-text-field>
-                                    </v-col>
+                                 
                                   </v-row>
                                 
                               </v-container>
@@ -84,26 +79,17 @@
         <div style="padding:12px">
           <v-data-table
           :headers="headers"
-          :items="products"
-          :items-per-page="5"
-          :search="search"
+          :items="category"
+          :items-per-page="10"
+   
           class="elevation-1"
        
         >
-       
+
         <template v-slot:item.action="{ item }" >
           <div class="p-2" >
             <v-row class="pl-2">
-              
-                <v-btn icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon color="green">
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-            
+                 <editComponent/>
                 <v-btn icon
                     v-bind="attrs"
                     v-on="on">
@@ -114,35 +100,7 @@
             </v-row>
           </div>
         </template>
-        <v-row>
-          <v-col align="center" >
-            <template v-slot:header.id="{ header }">
-         {{ header.text }}
-         </template>
-         </v-col>
-         <v-col align="center"> 
-           <template v-slot:header.category="{ header }">
-             {{ header.text }}
-            </template>
-         </v-col>
- 
-        <!-- <template v-slot:header.movie="{ header }">
-            {{ header.text }}
-         </template> -->
-         <!-- 
-         <template v-slot:header.vendor_shop="{ header }">
-       {{ header.text }}
-         </template> -->
-        
-         <!-- <template v-slot:header.address="{ header }">
-         {{ header.text }}
-         </template>
-         <template v-slot:header.phone_number="{ header }">
-         {{ header.text }}
-         </template>
-         <template v-slot:header.email="{ header }">
-           {{ header.text }}
-         </template> -->
+      
          <v-col align="end">  
            <template v-slot:item.status="{ item }">
            <v-chip
@@ -161,16 +119,20 @@
     </div>
 </template>
 <script>
+import editComponent from '~/components/editComponent.vue'
  export default {
+  components: { editComponent 
+  },
+
     data() {
       return {
-       
+        category:[],
          headers: [
           {
             text: 'ID',
             align: 'start',
             sortable: false,
-            value: 'id',
+            value: '_id',
             class: "green green-darken-1 white--text",
            
           },
@@ -178,26 +140,8 @@
           // { text: 'Address', value: 'address', class: "green green-darken-1 white--text" },
           // { text: 'Email Address', value: 'email', class: "green green-darken-1 white--text" },
           // { text: 'Movie Category Name ', value: 'movie', class: "green green-darken-1 white--text" },
-          { text: 'Category Name', value: 'category', class: "green green-darken-1 white--text " ,  },
+          { text: 'Category Name', value: 'Category_name', class: "green green-darken-1 white--text " ,  },
           { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },],
-        // icons: [
-        //   {
-        //     icons: 'mdi-card',
-        //   },
-        // ],
-        products: [
-          {
-            id: 'M-001',
-           
-            category: 'Movie',
-          },
-          {
-            id: 'M-002',
-          
-            category: 'Drama',
-          },
-        ],
-  
         dialog: false,
         rules: [
           (value) =>
@@ -206,13 +150,34 @@
             'Image size should be less than 2 MB!',
         ],
       }
-    },
+    },  created() {
+      this.getCategoryData();
+  },
    
     methods: {
-    
-    
-      }
-    }
+    getCategoryData(){
+      const axios = require('axios');
+      let category=[]
+            axios
+                .get(`http://localhost:3001/api/movie/category/`)
+                .then((res) => {
+               
+                  this.category= res.data
+                  console.log(this.category.Category_name)
+            
+                })
+                .catch((error) => {
+                console.log(error.response)
+              
+                })
+          
+            },
+
+        
+     }
+     }
+      
+
   
 </script>
 <style scoped>

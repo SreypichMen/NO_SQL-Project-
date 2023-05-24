@@ -40,23 +40,82 @@
                           </template>
                           <v-card>
                             <v-card-title>
-                              <span class="text-h5">Add category</span>
+                              <span class="text-h5">Add Movie</span>
                             </v-card-title>
                             <v-card-text>
                               <v-container>
                                 <v-row>
                                   <v-col>
-                                    <v-text-field
-                                      label="Category Name" 
+                                    
+                                    <v-select
+                                      :items="cates" 
+                                      v-model="cate"
+                                      item-text="name"
+                                      item-value="id"
+                                      label="Movie Title"
                                       required
-                                    ></v-text-field>
+                                    ></v-select>
                                   </v-col>
                                   <v-col>
                                       <v-text-field
-                                        label="Category Slug"
+                                        label="Type"
                                         required
                                       ></v-text-field>
                                     </v-col>
+
+                                  </v-row>
+                                  <v-row>
+                                  <v-col>
+                                    <v-select
+                                      :items="cates" 
+                                      v-model="cate"
+                                      item-text="Banner_Cate"
+                                      item-value="id"
+                                      label="Banner Subcategory"
+                                      required
+                                    ></v-select>
+                                  </v-col>
+                                  <v-col>
+                               
+                                      <v-text-field
+                                        label="Year"
+                                        required
+                                      ></v-text-field>
+                                    
+                                  </v-col>
+                                 
+                                  </v-row>
+                                  <v-row>
+                                    <v-col>
+                                      <v-text-field
+                                        label="Description"
+                                        required
+                                      ></v-text-field>
+                                    </v-col>
+                                    <v-col>
+                               
+                               <v-text-field
+                                 label="Episoide"
+                                 required
+                               ></v-text-field>
+                             
+                           </v-col>
+                                  </v-row>
+                                  <v-row>
+                                    <v-col>
+                                    <!-- <v-text-field
+                                        label="Description"
+                                        required
+                                      ></v-text-field> -->
+                                      <v-file-input
+                                          accept="image/png, image/jpeg, image/bmp"
+                                          placeholder="Pick an image"
+                                          prepend-icon="mdi-camera"
+                                          label="Image" 
+                                          v-model="image"
+                                        ></v-file-input>
+                                  </v-col>
+                                
                                   </v-row>
                                 
                               </v-container>
@@ -90,22 +149,14 @@
           class="elevation-1"
        
         >
-        <template v-slot:item.image="{ item }">
-          <div class="pa-1">
-            <v-img :src="item.image" :alt="item.name" height="70px" width="70px" style="border-radius: 10px; "></v-img>
-          </div>
+      
+        <template #[`item.movie_thumbnail`]="{ item }">
+          <img class="py-1" :src="item.movie_thumbnail" height="80px" width="70px" style="border-radius: 10px; "  />
         </template>
         <template v-slot:item.action="{ item }" >
           <div class="p-2" >
             <v-row class="pl-2">
-                <v-btn icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon color="green">
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
+              <editComponent/>
             
                 <v-btn icon
                     v-bind="attrs"
@@ -118,24 +169,12 @@
           </div>
         </template>
         <v-row>
-          <v-col align="center" >
+          <!-- <v-col align="center" >
             <template v-slot:header.id="{ header }">
          {{ header.text }}
          </template>
-         </v-col>
-         <v-col align="center"> 
-           <template v-slot:header.category="{ header }">
-             {{ header.text }}
-            </template>
-         </v-col>
- 
-        <template v-slot:header.movie="{ header }">
-            {{ header.text }}
-         </template>
-         
-        <template v-slot:header.image="{ header }">
-          {{ header.text }}
-       </template>
+         </v-col> -->
+
        
          <v-col align="end">  
            <template v-slot:item.status="{ item }">
@@ -156,72 +195,73 @@
     </div>
 </template>
 <script>
+import EditComponent from '~/components/editComponent.vue'
 export default {
+  components:{
+         EditComponent 
+       },
+       
     data() {
       return {
+       components:{
+         EditComponent 
+       },
        
          headers: [
-          {
-            text: 'ID',
-            align: 'start',
-            sortable: false,
-            value: 'id',
-            class: "green green-darken-1 white--text",
+          // {
+          //   text: 'ID',
+          //   align: 'start',
+          //   sortable: false,
+          //   value: '_id',
+          //   class: "green green-darken-1 white--text",
            
-          },
+          // },
           // { text: 'Vendor Shop', value: 'vendor_shop', class: "green green-darken-1 white--text", },
           // { text: 'Address', value: 'address', class: "green green-darken-1 white--text" },
           // { text: 'Email Address', value: 'email', class: "green green-darken-1 white--text" },
           // { text: 'Phone Number', value: 'phone_number', class: "green green-darken-1 white--text" },
           { text: 'Title ', value: 'title', class: "green green-darken-1 white--text" },
-          { text: 'Subcate ', value: 'subcate', class: "green green-darken-1 white--text" },
+          { text: 'Subcate ', value: 'subcategory.Subcategory_name', class: "green green-darken-1 white--text" },
           { text: 'Type', value: 'type', class: "green green-darken-1 white--text" },
-          { text: 'Description', value: 'des', class: "green green-darken-1 white--text" },
+        
           { text: 'Year', value: 'year', class: "green green-darken-1 white--text" },
-           { text: 'Banner Image', value: 'image', class: "green green-darken-1 white--text" },
-           { text: 'Episoide', value: 'ep', class: "green green-darken-1 white--text" },
+           { text: 'Image', value: 'movie_thumbnail', class: "green green-darken-1 white--text" },
+           { text: 'Episoide', value: 'episode', class: "green green-darken-1 white--text" },
+           { text: 'Description', value: 'description', class: "green green-darken-1 white--text text-xs" },
           { text: 'Action', value: 'action', class: "green green-darken-1 white--text" },],
           
-        // icons: [
-        //   {
-        //     icons: 'mdi-card',
-        //   },
-        // ],
-        products: [
-          {
-            id: 'm-001',
-            title: 'The Glory',
-            des:"A young woman, bullied to the point of deciding to drop out of school, plans the best way to get revenge. After becoming a primary school teacher, she takes in the son of the man who tormented her the most to enact her vengeance.",
-            image:'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRNF8dnUiY8ad1Z9-QRGPoRpqYjvwiVbLHkMcS5SO5h9Wm5SEy3',
-            year: '2023',
-            subcate: 'K-drama',
-            type:'Revenge',
-            ep: ""
-          },
-          {
-            id: 'm-002',
-            title: 'The Point Man',
-            des: "A Korean diplomat is dispatched to Afghanistan when a group of South Korean tourists is taken hostage by the Taliban.",
-            image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbPv8vauYDSLVEdkzDkc220GXGQ7g4_9jHIoVMhWwmfT9jNrT8',
-            year: '2023',
-            subcate: 'K-drama',
-            type:'Drama/Thriller',
-            ep: ""
-          },
-        ],
-  
-        dialog: false,
-        rules: [
-          (value) =>
-            !value ||
-            value.size < 2000000 ||
-            'Image size should be less than 2 MB!',
-        ],
+          products: [],
+    
+          dialog: false,
+          rules: [
+            (value) =>
+              !value ||
+              value.size < 2000000 ||
+              'Image size should be less than 2 MB!',
+          ],
       }
     },
+    created() {
+      this.getMovieData();
+  },
    
     methods: {
-    
+      getMovieData(){
+        const axios = require('axios');
+      // let products=[]
+            axios
+                .get(`http://localhost:3001/api/movie`)
+                .then((res) => {
+               
+                  this.products= res.data
+                  console.log(this.products)
+            
+                })
+                .catch((error) => {
+                console.log(error.response)
+              
+                })
+      }
     
       }
     }
@@ -230,6 +270,7 @@ export default {
 <style scoped>
 .dashboard{
     color: white;
-    
+    margin-left:30px;
+    margin-right: 30px;
   }
 </style>

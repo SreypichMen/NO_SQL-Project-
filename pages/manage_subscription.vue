@@ -98,15 +98,7 @@
         <template v-slot:item.action="{ item }" >
           <div class="p-2" >
             <v-row class="pl-2">
-                <v-btn icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon color="green">
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-            
+           <editComponent/>
                 <v-btn icon
                     v-bind="attrs"
                     v-on="on">
@@ -144,7 +136,12 @@
     </div>
 </template>
 <script>
+import editComponent from '~/components/editComponent.vue'
 export default {
+  components:{
+   editComponent
+  },
+
     data() {
       return {
        
