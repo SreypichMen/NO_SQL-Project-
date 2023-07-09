@@ -40,12 +40,6 @@ const changeStatus = async (req, res) => {
         doc.status = status;
         await doc.save();
 
-        const user = await User.findById(doc.customerId._id)
-        if(user) {
-            user.paymentStatus = status;
-            await user.save()
-        }
-
         res.status(200).json({ success: true, data: doc });
     } catch(error) {
         res.status(400).json({ success: false, error: error });

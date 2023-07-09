@@ -43,11 +43,11 @@ app.get("/", (req, res) => {
   res.send("hello");
 });
 
-app.use("/auth", authRoute);
-app.use('/api/movie', movieRoute)
-app.use('/api/banner',bannerRoute )
+app.use("/auth", authRoute );
+app.use('/api/movie', movieRoute )
+app.use('/api/banner', bannerRoute )
 app.use("/api/subscription", SubRoute );
-app.use("/api/payment",Payment  );
+app.use("/api/payment", Payment );
 // app.use("/category", categoryRoute);
 // app.use("/category", categoryRoute);
 // app.use("/order", orderRoute);

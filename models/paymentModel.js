@@ -9,7 +9,6 @@ const paymentSchema = mongoose.Schema({
     payment_type: {
         type: String,
         required:true,
-        unique: true
     },
     payment_method: {
         type: String,

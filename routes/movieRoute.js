@@ -17,7 +17,9 @@ const {
     delete_movie,
     getMostViewed,
     get_all_populate, 
-    get_by_filter 
+    get_by_filter,
+ getTypeMovie,
+ getTypeDrama
 
 } = require("../controllers/movieCtrl")
 const { requireAuthAdmin } = require("../middleware/authMiddleware");
@@ -43,6 +45,6 @@ router.delete("/:id",  delete_movie)
 router.get("/", getAllMovie)
 router.get("/all/filter", get_by_filter);
 router.get("/all_populate", get_all_populate);
-router.get("/analysis/mostviewed", getMostViewed)
+router.get("/analysis/mostviewed", getMostViewed);
 
 module.exports = router

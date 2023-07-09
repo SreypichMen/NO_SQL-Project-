@@ -1,7 +1,16 @@
 const Movie = require("../models/movieModel")
 const SubcateMovie = require("../models/movieSubCateModel")
 const CateMovie = require("../models/movieCateModel")
-const asyncHandler = require("express-async-handler")
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const decoded = require("../services/decodeToken");
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const sendEmail = require("../services/sendEmail");
+const asyncHandler = require("express-async-handler");
+const validateMongoDBId = require("../utils/validateMongodbid");
+const payment = require("../models/paymentModel");
+
 
 //create Category
 const createCategoryMovie = asyncHandler(async (req, res) => {
@@ -56,11 +65,70 @@ const getaMovie = asyncHandler(async (req, res) => {
     const { id } = req.params
     try {
         const findMovie = await Movie.findById(id)
-        if (findMovie) {
+        
+	if (findMovie) {
             findMovie.views = findMovie.views + 1
             await findMovie.save()
         }
-        res.json(findMovie)
+	
+	let showEps = false;
+
+  	const token = req.headers.authorization;
+
+	if(token) {
+ 		jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+    			console.log("requireAuth decoded token", decodedToken);
+    			
+			user = await User.findById(decodedToken.user_id);
+			console.log('user', user);
+			
+			//get payment by user id
+
+			let paymentDoc = await payment.findOne({ customerId: user._id.toString() }).populate(['plan']);
+			console.log('payment', paymentDoc);
+			
+			if(paymentDoc) {
+				
+				if(paymentDoc.status == 'pending' ) showEps = false;
+
+				if(paymentDoc.status == 'completed') {
+					//check expire Date
+					
+					const duration = paymentDoc.plan.value;
+					const startDate = paymentDoc.updatedAt;
+					const msPerDay = 24 * 60 * 60 * 1000; // milliseconds per day
+ 					const currentDate = new Date();
+  					const startDateTime = new Date(startDate);
+  					const expirationDate = new Date(startDateTime.getTime() + duration * msPerDay);
+
+					if(currentDate < expirationDate) {
+						showEps = true
+					} else {
+						showEps = false
+					}
+				}
+
+				if(!showEps) {
+					findMovie.episodes = [];
+					findMovie.movie_link = '';
+				}
+
+				return res.json(findMovie);
+
+			} else {
+				showEps = false
+				findMovie.episodes = [];
+				findMovie.movie_link = '';
+				return res.json(findMovie);
+			}
+
+  	        });
+	} else {
+
+		findMovie.episodes = [];
+		findMovie.movie_link = '';
+		return res.json(findMovie);
+	}       
     } catch (error) {
         throw new Error(error)
     }
@@ -88,7 +156,7 @@ const getAllSubCategory = asyncHandler(async (req, res) => {
 const getAllMovie = async (req, res) => {
 
     try {
-        const getallmovies = await Movie.find(req.query).populate("subcategory");
+        const getallmovies = await Movie.find(req.query).select(['-episodes', '-movie_link']).populate("subcategory");
         res.json(getallmovies)
     } catch (error) {
         throw new Error(error)
@@ -195,7 +263,7 @@ const updateSubcategory = asyncHandler(async (req, res) => {
 //update movie
 const updateMovie = asyncHandler(async (req, res) => {
     const { id } = req.params
-    const { title, description, type, movie_thumbnail, year, episode, subcategory, trailer, movie_link } = req.body
+    const { title, description, type, movie_thumbnail, year, episodes, subcategory, trailer, movie_link } = req.body
     try {
         const doc = await Movie.findById(id)
 
@@ -204,7 +272,7 @@ const updateMovie = asyncHandler(async (req, res) => {
         if (type) doc.type = type
         if (movie_thumbnail) doc.movie_thumbnail = movie_thumbnail
         if (year) doc.year = year
-        if (episode) doc.episode = episode
+        if (episodes) doc.episodes = episodes
         if (trailer) doc.trailer = trailer
         if (movie_link) doc.movie_link = movie_link
         if (subcategory) doc.subcategory = subcategory
@@ -293,5 +361,5 @@ module.exports = {
     delete_movie,
     getMostViewed,
     get_all_populate,
-    get_by_filter
+    get_by_filter,
 }

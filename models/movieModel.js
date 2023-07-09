@@ -25,9 +25,9 @@ const movieSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    episode: {
+    episodes: {
         type: Array,
-       
+	default: []
     },
     subcategory: {
         type: mongoose.Schema.Types.ObjectId,
