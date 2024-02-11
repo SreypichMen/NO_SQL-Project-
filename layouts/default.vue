@@ -50,60 +50,20 @@
             <v-list-item-title />Dashboard
           </v-list-item-content>
         </v-list-item>
-         <v-list-group
-            
-            prepend-icon="mdi-image-area"
-            no-action
-      >
-        <template v-slot:activator>
-          
-          <v-list-item-content  >
-            <v-list-item-title >Banner</v-list-item-title>
-          </v-list-item-content>
-        </template>
-
-        <v-list-item router exact to="/banner_category" >
-          <v-list-item-content >
-            <v-list-item-title  ><v-icon class="mr-3">mdi-select-group</v-icon>Category</v-list-item-title>
+       
+     
+        <v-list-item
+          router
+          exact to="/manage_movie"
+        >
+          <v-list-item-action>
+            <v-icon>mdi-play-box-edit-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title />Manage Movie
           </v-list-item-content>
         </v-list-item>
-
-        <v-list-item router exact to="/manage_banner">
-          <v-list-item-content  >
-            <v-list-item-title ><v-icon  class="mr-3">mdi-image-edit-outline</v-icon>Picture</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group>
-       <v-list-group
-            
-            prepend-icon="mdi-movie-open"
-            no-action
-      >
-        <template v-slot:activator>
-          
-          <v-list-item-content  >
-            <v-list-item-title >Movie</v-list-item-title>
-          </v-list-item-content>
-        </template>
-
-        <v-list-item router exact to="/movie_category" >
-          <v-list-item-content >
-            <v-list-item-title  ><v-icon class="mr-3">mdi-select-group</v-icon>Category</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item router exact to="/manage_movie_subcate" >
-          <v-list-item-content >
-            <v-list-item-title  ><v-icon class="mr-3">mdi-shape-plus</v-icon>Subcategory</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item router exact to="/manage_movie">
-          <v-list-item-content  >
-            <v-list-item-title ><v-icon  class="mr-3">mdi-play-box-edit-outline</v-icon>movie</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group>
-      <v-list-item
+        <v-list-item
           router
           exact to="/manage_user"
         >
@@ -114,28 +74,7 @@
             <v-list-item-title />User
           </v-list-item-content>
         </v-list-item>
-        <v-list-item
-          router
-          exact to="/manage_subscription"
-        >
-          <v-list-item-action>
-            <v-icon>mdi-account-cash-outline</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title />Subscription
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
-          router
-          exact to="/manage_transaction"
-        >
-          <v-list-item-action>
-            <v-icon>mdi-cash-check</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title />Transaction
-          </v-list-item-content>
-        </v-list-item>
+        
       </v-list>
      
     </v-navigation-drawer>
