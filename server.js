@@ -7,15 +7,11 @@ const morgan = require("morgan");
 require("dotenv").config();
 const path = require("path");
 
-
-
 //route import
 const authRoute = require("./routes/authRoute");
 const externalRoute = require("./routes/externalRoute");
 const movieRoute = require('./routes/movieRoute')
-const bannerRoute = require('./routes/bannerRoute')
-const SubRoute = require('./routes/subRoute')
-const Payment = require('./routes/paymentRoute')
+
 //options
 const app = express();
 const port = 3001;
@@ -44,11 +40,5 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoute );
-app.use('/api/movie', movieRoute )
-app.use('/api/banner', bannerRoute )
-app.use("/api/subscription", SubRoute );
-app.use("/api/payment", Payment );
-// app.use("/category", categoryRoute);
-// app.use("/category", categoryRoute);
-// app.use("/order", orderRoute);
+app.use('/api/movie', movieRoute)
 app.use(externalRoute);

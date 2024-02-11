@@ -1,53 +1,54 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
 const movieSchema = mongoose.Schema({
     title: {
         type: String,
         required: [true, "Please enter movie name"],
         unique: true
     },
+    duration: {
+        type: Number, // Changed to Number
+        required: true,
+    },
+    kind: [{
+        type: String, // Array of strings
+        required: true
+    }],
+    year: {
+        type: Number, // Changed to Number
+        required: true,
+    },
+    natio: {
+        type: String,
+        required: true,
+    },
     description: {
         type: String,
-        required: true,
-    },
-    type: {
-        type: String,
-        required: true,
-    },
-    year: {
-        type: String,
-        required: true,
+       
     },
     movie_thumbnail: {
         type: String,
         required: true,
     },
-    trailer:{
-        type: String,
+    review: {
+        type: Number
+    },
+    director: {
+        type: {
+            lastname: String, // Nested object with string properties
+            firstname: String
+        },
         required: true,
     },
-    episodes: {
-        type: Array,
-	default: []
-    },
-    subcategory: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Subcategory",
-        required: true,
-    },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
+    Act: [{
+        lastname: String, // Array of objects with string properties
+        firstname: String,  
        
     },
-
-    views: {
-        type: Number,
-        default: 0
-    }
-
+   ]
 }, {
     timestamps: true
-})
+});
 
-const Movie = mongoose.model('Movie', movieSchema)
-module.exports = Movie
+const Movie = mongoose.model('Movie', movieSchema);
+module.exports = Movie;

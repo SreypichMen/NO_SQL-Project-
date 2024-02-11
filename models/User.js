@@ -13,22 +13,12 @@ const userSchema = new mongoose.Schema(
       validate: [validator.isEmail, "Please enter a valid email"],
     },
 
-    mobile: {
-      type: String,
-      required: [true, "Please enter phone"],
-      unique: true,
-    },
-
+   
     firstname: {
       type: String,
       required: true,
-
-  },
-  lastname: {
-      type: String,
-      required: true,
-
-  },
+    },
+  
     password: {
       type: String,
       required: [true, "Please enter a password"],
@@ -47,32 +37,23 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "customer",
+      default: "User",
       validate: {
         validator: function (el) {
-          if (el != "customer") return false;
+          if (el != "User") return false;
         },
         message: "You not allow to define user role",
       },
     },
     profile_img: {
       type: String,
-    
     },
-  isBlocked: {
-      type: Boolean,
-      default: false
-  },
     passwordResetToken: {
       type: String,
     },
     passwordResetExpires: {
       type: Date,
     },
-    paymentStatus: {
-      type: String,
-      default: 'pending'
-    }
   },
   { timestamps: true }
 );

@@ -2,7 +2,6 @@ const { Router } = require("express");
 const externalController = require("../controllers/externalController");
 const router = Router();
 const multer = require("multer");
-
 const storageImages = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./upload");
@@ -14,11 +13,9 @@ const storageImages = multer.diskStorage({
   },
 });
 const uploadImage = multer({ storage: storageImages });
-
 router.post(
   "/upload-image",
   uploadImage.single("file"),
   externalController.upload_image
 );
-
 module.exports = router;

@@ -184,7 +184,7 @@ const update_password = async (req, res) => {
         if (isSame) {
           return res.json({
             success: false,
-            error: "this new password is same with old password",
+            error: "This new password is same with old password",
           });
         }
 
@@ -369,50 +369,7 @@ const get_all_user = async (req, res) => {
   }
 };
 
-const delete_user_from_admin = async (req, res) => {
-  const { user_id } = req.params;
 
-  try {
-    const deleting = await User.deleteOne({ _id: user_id });
-    res.status(200).json({ success: true, data: deleting });
-  } catch (error) {
-    res.status(400).json({ success: false, error: error });
-  }
-};
-const blockUser = asyncHandler(async(req, res) => {
-  const { id } = req.params;
-  validateMongoDBId(id)
-  try {
-      const block = await User.findByIdAndUpdate(
-          id, {
-              isBlocked: true
-          }, {
-              new: true
-          }
-
-      )
-      res.json(block)
-  } catch (error) {
-      throw new Error(error)
-  }
-})
-const unblockUser = asyncHandler(async(req, res) => {
-      const { id } = req.params;
-      validateMongoDBId(id)
-      try {
-          const unblock = await User.findByIdAndUpdate(
-              id, {
-                  isBlocked: false
-              }, {
-                  new: true
-              }
-
-          )
-          res.json(unblock)
-      } catch (error) {
-          throw new Error(error)
-      }
-  })
 
 module.exports = {
   login,
@@ -428,7 +385,6 @@ module.exports = {
   reset_password,
   check_reset_expire,
   get_all_user,
-  delete_user_from_admin,
-  blockUser ,
-  unblockUser
+ 
+  
 };

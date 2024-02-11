@@ -25,12 +25,6 @@ router.post("/forgot-password", authController.forgot_password);
 router.post("/reset-password/:token", authController.reset_password);
 router.get("/reset-expire/:token", authController.check_reset_expire);
 router.get("/users/all", requireAuthAdmin, authController.get_all_user);
-router.put('/block-user/:id', requireAuthAdmin, authController.blockUser)
-router.put('/unblock-user/:id', requireAuthAdmin, authController.unblockUser)
-router.post(
-  "/user/delete/:user_id",
-  requireAuthAdmin,
-  authController.delete_user_from_admin
-);
+
 
 module.exports = router;
