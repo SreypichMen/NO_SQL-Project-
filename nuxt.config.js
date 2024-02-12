@@ -20,14 +20,16 @@ export default {
             { hid: 'description', name: 'description', content: '' },
             { name: 'format-detection', content: 'telephone=no' },
         ],
-        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+        link: [{ rel: 'icon', type: 'image/x-icon', href: '/sabay_entertainment.ico' }],
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: [],
+    plugins: [
+      '~/plugins/vue-apexcharts.js',
+    ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -42,6 +44,7 @@ export default {
     modules: [
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
+        '@nuxtjs/auth-next'
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -49,6 +52,33 @@ export default {
         // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
         baseURL: '/',
     },
+    auth: {
+        strategies: {
+          local: {
+            token: {
+              required: true,
+              maxAge: 86400, //in second
+              autoLogout: true,
+              type: false,
+            },
+
+            user: {
+              property: false, //if status is error it's mean token is not valid
+            },
+
+            //endpoints first login --> user, after logged user request every time
+            endpoints: {
+		    login: { url: 'http://localhost:3001/auth/login', method: 'post' },//login to get token
+              user: { url: 'http://localhost:3001/auth/me', method: 'get' }//auto request to backend as a verification token is valid
+              // logout: { url: 'http://localhost:3001/api/user/logout', method: 'post' },
+            },
+          },
+        },
+      },
+
+      // router: {
+      //   middleware: ['auth'],
+      // },
 
     // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
     vuetify: {
@@ -72,5 +102,18 @@ export default {
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
-    build: {},
+      // Build Configuration: https://go.nuxtjs.dev/config-build
+      build: {
+        terser: {
+          terserOptions: {
+            compress: {
+              drop_console: true
+            }
+          }
+        }
+      },
+  
+      generate: {
+          fallback: '404.html',
+      },
 }

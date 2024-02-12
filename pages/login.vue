@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div >
       <v-container>
-        <div style="display:flex; justify-content: center; border:1px solid #9E9E9E; border-radius: 10px; padding: 15px; margin-right:15%; " >
+        <div   v-show="!$auth.loggedIn"  style="display:flex; justify-content: center; border:1px solid #9E9E9E; border-radius: 10px; padding: 15px; margin-right:15%; " >
     
             <v-row>
             <v-col md="6" align="center" style="padding: 7%" class="mt-2">
@@ -11,9 +11,9 @@
                 <v-card style="margin-top: -12px; margin-bottom: -12px;padding: -12px; width: 100%; margin-left: 12px; padding:50px;border-radius: 0px 10px 10px 0" >
     
                  <form @submit.prevent="userLogin">
-                <center>
+                <!-- <center>
                   <img class="logo mt-4"  src="~/assets/img/sabay_entertainment.png">
-                </center>
+                </center> -->
                 <v-row class="mt-5 " >
                     <v-col align="center" >
                     <h3>Hello again!</h3>
@@ -22,7 +22,7 @@
                 <v-row>
                     <v-col align="center" >
                         <p>Happy to see you here! </p>
-                        <p style="margin-top: -5px">Managing Everything in Sabay Entertainment Here!</p>
+                        <p style="margin-top: -5px">Managing Everything in Here!</p>
                     </v-col>
                 </v-row>
     
@@ -51,7 +51,7 @@
                     <v-btn width="100%" color="#034C7C" style="border-radius: 5px; padding: 20px;margin-bottom: 40px; height: 50px"
                     :loading="isLoading"
                       :disabled="isLoading"
-                      type="submit"d
+                      type="submit"
                       elevation="0">
                       <h4>Login</h4>
                     </v-btn>
@@ -97,7 +97,7 @@
             let response = await this.$auth.loginWith('local', { data: this.login })
             //user login success redirect user to home page
             if (response.data.success) {
-              this.$router.push('/')
+              location.replace('/');
             }
           } catch (err) {
             this.error = err.response.data.error
@@ -112,48 +112,6 @@
             this.error[property] = ''
           }
         }
-        // async userLogin() {
-        //   this.isLoading = true
-        //    let response = await this.$auth.loginWith('local', {
-        //             data: {
-        //                 email: this.email,
-        //                 password: this.password,
-        //             },
-        //         })
-    
-        //         if ( response.data.success==true){
-        //                  this.$auth.strategy.token.set(response.data.token)
-        //                  this.$auth.setUser(response.data.user)
-        //                 //  location.reload()
-        //                 // location.replace('/')
-        //                  this.$router.push('/')
-        //                 //  this.refresh()
-        //       }
-    
-        //       else if (response.success==false) {
-        //             console.log("error")
-        //         // this.$auth.strategy.token.set(response.data.token)
-        //         // this.$auth.setUser(response.data.user)
-    
-        //         // this.refresh()
-        //         // this.$router.push('/subscription')
-    
-    
-        //   }
-    
-    
-    
-    
-        // },
-        //  errorMessages(property) {
-        //   return this.error[property]
-        // },
-    
-        // resetErrorMessages(property) {
-        //   if (this.error[property]) {
-        //     this.error[property] = ''
-        //   }
-        // },
         
       },
     }

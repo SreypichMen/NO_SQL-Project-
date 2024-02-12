@@ -23,7 +23,7 @@
                   </v-col>
                   <v-col align="end" style="margin-top: 18px; margin-right: 12px">
                       <v-row justify="end">
-                          <v-dialog v-model="dialog" persistent max-width="800px">
+                          <v-dialog v-model="dialog" persistent max-width="900px">
                               <template v-slot:activator="{ on, attrs }">
                                   <v-btn
                                       v-bind="attrs"
@@ -65,7 +65,7 @@
                                       <v-col v-for="(kind, index) in movie.kind" :key="index">
                                           <!-- Input field -->
                                           <v-row align="center">
-                                              <v-col cols="10">
+                                              <v-col cols="8">
                                                   <v-text-field v-model="movie.kind[index]" label="Type" required></v-text-field>
                                               </v-col>
                                               <!-- Delete button for each input field -->
@@ -112,7 +112,7 @@
                                         <v-text-field label="Description" v-model="movie.description" outlined clearable required></v-text-field>
                                       </v-col>
                                     </v-row>
-                                    <v-row>
+                                    <v-row style="margin-top:-30px"> 
                                       <v-col align="center">
                                         <v-file-input accept="image/png, image/jpeg, image/bmp" placeholder="Pick an image" prepend-icon="mdi-camera" label="Image" v-model="file"></v-file-input>
                                         <div v-if="file">
@@ -236,6 +236,9 @@ export default {
           ],
       }
   },
+    middleware: [
+    'auth'
+  ],
   created() {
       this.getMovieData();
   },
@@ -291,6 +294,7 @@ async save() {
       natio: this.movie.natio,
       director: this.movie.director,
       Act: this.movie.Act,
+    
       movie_thumbnail: imageData.data
     };
 

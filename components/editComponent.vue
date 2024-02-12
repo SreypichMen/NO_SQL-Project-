@@ -64,8 +64,8 @@
               <v-row>
                 <v-col align="center">
                   <v-file-input accept="image/png, image/jpeg, image/bmp" placeholder="Pick an image" prepend-icon="mdi-camera" label="Image" v-model="file"></v-file-input>
-                  <div v-if="file">
-                    <img width="200" :src="createImageUrl(file)" />
+                  <div v-if="file || existingImageUrl">
+                    <img width="200" :src="file ? createImageUrl(file) : existingImageUrl" />
                   </div>
                 </v-col>
               </v-row>
@@ -109,7 +109,8 @@ export default {
       isLoading: false,
       status: '',
       message: '',
-      file: null
+      file: null, 
+      existingImageUrl: null,
     };
   },
   created() {
@@ -127,6 +128,7 @@ export default {
                 .then((res) => {
 
                   this.movie= res.data
+                  this.existingImageUrl = this.movie.movie_thumbnail;
                   console.log(this.movie)
                   
                 })
@@ -135,40 +137,44 @@ export default {
 
                 })
       },
-    async save() {
-      this.isLoading = true;
-      try {
-        let image_url = '';
-        if (this.file) {
-          let formData = new FormData();
-          formData.append('file', this.file);
-          const res = await this.$axios.post('http://localhost:3001/api/upload-image', formData);
-          image_url = res.data;
-        }
-        let data = {
-          title: this.movie.title,
-          description: this.movie.description,
-          kind: this.movie.kind,
-          year: this.movie.year,
-          movie_link: this.movie.movie_link, // Assuming this variable is defined elsewhere
-          trailer: this.movie.trailer, // Assuming this variable is defined elsewhere
-          subcategory: this.subcate, // Assuming this variable is defined elsewhere
-          movie_thumbnail: image_url
-        };
-        await this.$axios.put(`http://localhost:3001/api/movie/${this.id}`, data);
-        this.$nuxt.$emit('getProduct');
-        this.status = 'OK';
-        this.message = 'Success';
-        this.dialog = false;
-        location.replace('/manage_movie');
-      } catch (error) {
-        this.status = 'ERROR';
-        this.message = 'Something went wrong';
-      }
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 2000);
-    },
+      async save() {
+  this.isLoading = true;
+  try {
+    let image_url = '';
+    if (this.file) {
+      let formData = new FormData();
+      formData.append('file', this.file);
+      const res = await this.$axios.post('http://localhost:3001/upload-image', formData);
+      image_url = res.data.data; // Extracting the URL string from the response data object
+    }
+    let data = {
+      title: this.movie.title,
+      description: this.movie.description,
+      kind: this.movie.kind,
+      year: this.movie.year,
+      duration: this.movie.duration,
+      movie_link: this.movie.movie_link, // Assuming this variable is defined elsewhere
+      natio: this.movie.natio,
+      director: this.movie.director,
+      Act: this.movie.Act,
+      movie_thumbnail: image_url // Set the movie thumbnail to the extracted URL string
+    };
+    await this.$axios.put(`http://localhost:3001/api/movie/${this.id}`, data);
+    this.$nuxt.$emit('getProduct');
+    this.status = 'OK';
+    this.message = 'Success';
+    this.dialog = false;
+    location.replace('/manage_movie');
+  } catch (error) {
+    this.status = 'ERROR';
+    this.message = 'Something went wrong';
+  }
+  setTimeout(() => {
+    this.isLoading = false;
+  }, 2000);
+},
+
+
     createImageUrl(file) {
       return URL.createObjectURL(file);
     },
@@ -178,14 +184,17 @@ export default {
     deleteKindRow(index) {
       this.movie.kind.splice(index, 1);
     },
-    addActorRow() {
-      this.movie.Act.push({
-        firstname: '',
-        lastname: ''
+    addActorRow(index) {
+      this.movie.Act.splice(index + 1, 0, { firstname: '', lastname: ''
       });
     },
     deleteActorRow(index) {
       this.movie.Act.splice(index, 1);
+    }, 
+    onFileChange(event) {
+      const file = event.target.files[0];
+      this.file = file;
+      this.existingImageUrl = this.createImageUrl(file); // Display the new image immediately
     }
   }
 };

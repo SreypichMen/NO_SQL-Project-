@@ -134,6 +134,24 @@
 
 </template>
 <script>
+import axios from 'axios'
+
+ export default {
+   
+    
+    
+
+    middleware: [
+    'auth'
+  ],
+    methods: {
+       
+    
+      }
+    }
+
+    
+
 </script>
 <style scoped>
 .dashboard{

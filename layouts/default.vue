@@ -7,9 +7,10 @@
       fixed
       app 
       style="background: rgba(255, 255, 255, 0.89);"
-  
+      v-show="$auth.loggedIn" 
+     zoom="80%"
     >
-      <div class="mt-10">
+      <div class="mt-10" v-show="$auth.loggedIn">
         <v-row>
           <v-col align="center">
               <img class="img_logo" src="~/assets/img/sabay_entertainment.png">
@@ -38,7 +39,7 @@
 
         </v-row>
       </div>
-      <v-list>
+      <v-list >
         <v-list-item
           router
           exact to="/"
@@ -78,7 +79,7 @@
       </v-list>
      
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar :clipped-left="clipped" fixed app v-show="$auth.loggedIn">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
