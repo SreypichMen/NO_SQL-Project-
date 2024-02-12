@@ -11,7 +11,7 @@ const path = require("path");
 const authRoute = require("./routes/authRoute");
 const externalRoute = require("./routes/externalRoute");
 const movieRoute = require('./routes/movieRoute')
-
+const rateRoute = require('./routes/rateRoute')
 //options
 const app = express();
 const port = 3001;
@@ -42,3 +42,4 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoute );
 app.use('/api/movie', movieRoute)
 app.use(externalRoute);
+app.use('/rate', rateRoute)
