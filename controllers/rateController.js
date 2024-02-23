@@ -1,11 +1,11 @@
 const Movie = require("../models/movieModel");
 const User = require("../models/User");
-const Rate = require("../models/rateCommentModel"); // Renamed from 'rate' to 'Rate' to match the model name convention
+const Rate = require("../models/rateCommentModel");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const validateMongoDBId = require("../utils/validateMongodbid");
 
-//create Rate
+// Create Rate
 const createRate = asyncHandler(async (req, res) => {
     try {
         const newRate = await Rate.create(req.body);
@@ -15,6 +15,7 @@ const createRate = asyncHandler(async (req, res) => {
     }
 });
 
+// Get Rate by ID
 const getRate = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
@@ -33,18 +34,59 @@ const getRate = asyncHandler(async (req, res) => {
     }
 });
 
-
-//get all rates
+// Get All Rates
 const getAllRates = async (req, res) => {
-
     try {
-        const getAllRates = await Rate.find(req.query)
-        res.json(getAllRates);
+        // Fetch all rates and populate movie and user details
+        const allRates = await Rate.find(req.query)
+            .populate('movie_id')
+            .populate('user_id');
+
+        // Aggregate rates to calculate average rate for each movie
+        const ratesWithAverage = await Rate.aggregate([
+            {
+                $group: {
+                    _id: "$movie_id", // Group by movie_id
+                    averageRate: { $avg: "$rate" }, // Calculate average rate
+                    count: { $sum: 1 } // Count number of rates for each movie
+                }
+            },
+            {
+                $lookup: {
+                    from: "movies", // Collection to join with
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "movie" // Output field name
+                }
+            },
+            {
+                $unwind: "$movie" // Flatten the movie array
+            },
+            {
+                $project: { // Project the fields to include in the output
+                    _id: 1,
+                    averageRate: 1,
+                    count: 1,
+                    movie_id: "$movie._id", // Rename movie._id to movie_id
+                    movie_title: "$movie.title" // Include movie title in the output
+                }
+            }
+        ]);
+
+        // Combine both data sets into one response object
+        const combinedData = {
+            allRates,
+            ratesWithAverage
+        };
+
+        res.json(combinedData);
     } catch (error) {
-        throw new Error(error);
+        console.error("Error while fetching rates:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
+// Update Rate
 const updateRate = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { rate, comment } = req.body;
@@ -65,7 +107,7 @@ const updateRate = asyncHandler(async (req, res) => {
     }
 });
 
-//delete rate
+// Delete Rate
 const deleteRate = async (req, res) => {
     const { id } = req.params;
     try {
@@ -84,10 +126,13 @@ const deleteRate = async (req, res) => {
     }
 };
 
+
+
 module.exports = {
     createRate,
     getRate,
     getAllRates,
     updateRate,
     deleteRate,
+  
 };

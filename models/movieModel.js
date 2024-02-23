@@ -30,9 +30,6 @@ const movieSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    review: {
-        type: Number
-    },
     director: {
         type: {
             lastname: String, // Nested object with string properties
@@ -44,8 +41,15 @@ const movieSchema = mongoose.Schema({
         lastname: String, // Array of objects with string properties
         firstname: String,  
        
-    },
-   ]
+    }], 
+    averageRate: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "rate"
+    }, 
+    views: {
+        type: Number, // Define 'views' as a Number type
+        default: 0     // Set a default value if needed
+    }
 }, {
     timestamps: true
 });

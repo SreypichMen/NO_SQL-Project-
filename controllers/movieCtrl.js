@@ -1,9 +1,8 @@
 const Movie = require("../models/movieModel");
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const validateMongoDBId = require("../utils/validateMongodbid");
-
+const Rate = require('../models/rateCommentModel');
 //create Movie
 const createMovie = asyncHandler(async (req, res) => {
     try {
@@ -35,12 +34,28 @@ const getMovie = asyncHandler(async (req, res) => {
 
 //get all movies
 const getAllMovies = async (req, res) => {
-
     try {
-        const getAllMovies = await Movie.find(req.query)
-        res.json(getAllMovies);
+        // Fetch all movies
+        const allMovies = await Movie.find();
+
+        // Fetch average rate for each movie
+        const moviesWithAverageRate = await Promise.all(allMovies.map(async movie => {
+            const rates = await Rate.find({ movie_id: movie._id }); // Assuming 'movie_id' is the field in Rate model referencing the movie
+            const rateCount = rates.length;
+            const totalRate = rates.reduce((sum, rate) => sum + rate.rate, 0);
+            const averageRate = rateCount > 0 ? totalRate / rateCount : 0;
+
+            return {
+                ...movie.toObject(), // Convert Mongoose document to plain JavaScript object
+                averageRate,
+                rateCount
+            };
+        }));
+
+        res.json(moviesWithAverageRate);
     } catch (error) {
-        throw new Error(error);
+        console.error('Error fetching movies:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -101,7 +116,38 @@ const deleteMovie = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+const getMostViewed = async (req, res) => {
+    try {
+        // Aggregate to get the top 5 most viewed movies
+        const movies = await Movie.aggregate([
+            { 
+                $sort: { views: -1 } // Sort by views in descending order
+            },
+            { 
+                $limit: 5 // Limit to the top 5 movies
+            }
+        ]);
 
+        // Total views of all movies
+        const result = await Movie.aggregate([
+            { 
+                $group: {
+                    _id: null,
+                    totalViews: { $sum: "$views" } // Sum of views of all movies
+                }
+            }
+        ]);
+
+        const totalViews = result.length > 0 ? result[0].totalViews : 0;
+
+        // Total number of movies
+        const totalMovies = await Movie.countDocuments();
+
+        res.json({ success: true, data: { movies, totalViews, totalMovies } });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
 
 module.exports = {
     createMovie,
@@ -109,4 +155,5 @@ module.exports = {
     getAllMovies,
     updateMovie,
     deleteMovie,
+    getMostViewed 
 };

@@ -12,27 +12,22 @@ const userSchema = new mongoose.Schema(
       unique: true,
       validate: [validator.isEmail, "Please enter a valid email"],
     },
-
-   
     firstname: {
       type: String,
       required: true,
     },
-  
     password: {
       type: String,
       required: [true, "Please enter a password"],
       minlength: [8, "Minimum password is 8 characters"],
     },
-
     confirmPassword: {
       type: String,
       validate: {
-        //only work on CREATE and SAVE
         validator: function (el) {
           return el === this.password;
         },
-        message: "Password are not the same",
+        message: "Passwords are not the same",
       },
     },
     role: {
@@ -40,9 +35,9 @@ const userSchema = new mongoose.Schema(
       default: "User",
       validate: {
         validator: function (el) {
-          if (el != "User") return false;
+          return el === "User"; // Modified validation logic
         },
-        message: "You not allow to define user role",
+        message: "You are not allowed to define the user role",
       },
     },
     profile_img: {
@@ -58,22 +53,35 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-//before save document
+// Before saving the document
 userSchema.pre("save", async function (next) {
-  //if not modified password do nothing
+  // If the email is not present or modified, do nothing
+  if (!this.isModified("email")) return next();
+
+  // Check if the email is not null
+  if (!this.email) {
+    return next(new Error("Email cannot be null"));
+  }
+
+  next();
+});
+
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  // If not modified password, do nothing
   if (!this.isModified("password")) return next();
 
-  //hash password
+  // Hash password
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
 
-  //delete password confirm field
+  // Delete password confirm field
   this.confirmPassword = undefined;
 
   next();
 });
 
-// static method to login user
+// Static method to login user
 userSchema.statics.login = async function (email, password) {
   try {
     const user = await this.findOne({ email });
@@ -82,23 +90,15 @@ userSchema.statics.login = async function (email, password) {
       if (auth) {
         return user;
       }
-      throw Error("incorrect password");
+      throw new Error("Incorrect password");
     }
-    throw Error("incorrect email");
+    throw new Error("Incorrect email");
   } catch (error) {
-    let errors = "";
-    console.log("User.login", error.message);
-
-    if (error.message.includes("data and hash arguments required")) {
-      errors = "Please enter password";
-    } else {
-      errors = error;
-    }
-    throw Error(errors);
+    throw error;
   }
 };
 
-//create reset token
+// Create reset token
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
 

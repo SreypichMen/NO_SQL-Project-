@@ -131,11 +131,10 @@ const update_user = async (req, res) => {
   try {
     if (user.success) {
       const doc = await User.findById(user.data.user_id);
-      if (body.firstName) doc.firstName = body.firstName;
-      if (body.lastName) doc.lastName = body.lastName;
+      if (body.firstname) doc.firstName = body.firstName;
+   
       if (body.imageUrl) doc.imageUrl = body.imageUrl;
-      if (body.userName) doc.userName = body.userName;
-
+     
       await doc.save();
       res.status(200).json({ success: true, data: doc });
     }

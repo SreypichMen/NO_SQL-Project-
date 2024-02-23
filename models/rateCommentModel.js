@@ -19,6 +19,10 @@ const rateSchema = mongoose.Schema({
         ref: "Movie",
         required: true,
     },
+    averageRate: {
+        type: Number,
+        default: 0 // Default value for the average rate
+    }
     
 }, {
     timestamps: true
