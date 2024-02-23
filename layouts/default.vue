@@ -1,41 +1,25 @@
 <template>
-  <v-app dark>
-   
+  <v-app dark fluid fill-height class="background">
     <v-main>
-      <v-container>
+      <v-container >
         <Nuxt />
       </v-container>
     </v-main>
-    
-    
   </v-app>
 </template>
 
 <script>
 export default {
   name: 'DefaultLayout',
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
-    }
-  },
 }
 </script>
+
+<style scoped>
+.background {
+  background-image: url("~@/assets/background.jpg");
+  /* Add other background properties for styling */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
