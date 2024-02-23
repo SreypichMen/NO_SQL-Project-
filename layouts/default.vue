@@ -40,7 +40,7 @@
         </v-row>
       </div>
       <v-list >
-        <v-list-item
+        <!-- <v-list-item
           router
           exact to="/"
         >
@@ -50,12 +50,12 @@
           <v-list-item-content>
             <v-list-item-title />Dashboard
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
        
      
         <v-list-item
           router
-          exact to="/manage_movie"
+          exact to="/"
         >
           <v-list-item-action>
             <v-icon>mdi-play-box-edit-outline</v-icon>
