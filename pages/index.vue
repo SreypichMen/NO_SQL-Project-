@@ -155,7 +155,7 @@
               <template v-slot:item.action="{ item }" >
                   <div class="p-2" >
                       <v-row class="pl-2">
-                        <editComponent :id="item._id" :subcates="subcates"/>
+                        <EditComponent :id="item._id"/>
                         <deleteComponent  :id="item._id"/>
                           
                       </v-row>
@@ -305,7 +305,7 @@ async save() {
     this.status = 'OK';
     this.message = 'Success';
     this.dialog = false;
-    location.replace('/manage_movie');
+    location.replace('/');
   } catch (error) {
     this.status = 'ERROR';
     this.message = 'Something went wrong';

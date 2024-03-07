@@ -36,7 +36,7 @@
         this.$nuxt.$emit('getProduct')
         this.isLoading = false
         this.dialog = false
-        location.replace('/manage_movie')
+        location.replace('/')
       })
       },
     },

@@ -86,7 +86,7 @@
 
 <script>
 export default {
-  props: ['id', 'subcates'],
+  props: ['id'],
   data() {
     return {
       dialog: false,
@@ -164,7 +164,7 @@ export default {
     this.status = 'OK';
     this.message = 'Success';
     this.dialog = false;
-    location.replace('/manage_movie');
+    location.replace('/');
   } catch (error) {
     this.status = 'ERROR';
     this.message = 'Something went wrong';

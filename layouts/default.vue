@@ -13,7 +13,7 @@
       <div class="mt-10" v-show="$auth.loggedIn">
         <v-row>
           <v-col align="center">
-              <img class="img_logo" src="~/assets/img/sabay_entertainment.png">
+              <img class="img_logo" src="~/assets/img/logo-transparent-png.png">
           </v-col>
         </v-row>
         <v-row  >
