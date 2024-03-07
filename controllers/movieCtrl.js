@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const validateMongoDBId = require("../utils/validateMongodbid");
 const Rate = require('../models/rateCommentModel');
+const mongoose = require('mongoose');
+const User = require('../models/User');
 //create Movie
 const createMovie = asyncHandler(async (req, res) => {
     try {
@@ -16,21 +18,46 @@ const createMovie = asyncHandler(async (req, res) => {
 const getMovie = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
-        if (!id) {
-            return res.status(400).json({ success: false, message: 'Movie ID is missing.' });
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: 'Invalid movie ID.' });
         }
-        
+
         const findMovie = await Movie.findById(id);
         if (!findMovie) {
             return res.status(404).json({ success: false, message: 'Movie not found.' });
         }
        
-        res.json(findMovie);
+        const rates = await Rate.find({ movie_id: id });
+        const rateCount = rates.length;
+        const totalRate = rates.reduce((sum, rate) => sum + rate.rate, 0);
+        const averageRate = rateCount > 0 ? totalRate / rateCount : 0;
+
+        // Populate user details for each rate
+        const populatedRates = await Promise.all(rates.map(async rate => {
+            const user = await User.findById(rate.user_id);
+            return {
+                ...rate.toObject(),
+                user: user ? {
+                    _id: user._id,
+                    firstname: user.firstname,
+                    // Add other user details you want to include
+                } : null
+            };
+        }));
+
+        const movieWithAverageRate = {
+            ...findMovie.toObject(),
+            user_rate: populatedRates, // Include user details in the user_rate array
+            averageRate,
+            rateCount
+        };
+
+        res.json(movieWithAverageRate);
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error fetching movie:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
     }
 });
-
 
 //get all movies
 const getAllMovies = async (req, res) => {
@@ -116,38 +143,7 @@ const deleteMovie = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
-const getMostViewed = async (req, res) => {
-    try {
-        // Aggregate to get the top 5 most viewed movies
-        const movies = await Movie.aggregate([
-            { 
-                $sort: { views: -1 } // Sort by views in descending order
-            },
-            { 
-                $limit: 5 // Limit to the top 5 movies
-            }
-        ]);
 
-        // Total views of all movies
-        const result = await Movie.aggregate([
-            { 
-                $group: {
-                    _id: null,
-                    totalViews: { $sum: "$views" } // Sum of views of all movies
-                }
-            }
-        ]);
-
-        const totalViews = result.length > 0 ? result[0].totalViews : 0;
-
-        // Total number of movies
-        const totalMovies = await Movie.countDocuments();
-
-        res.json({ success: true, data: { movies, totalViews, totalMovies } });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-}
 
 module.exports = {
     createMovie,
@@ -155,5 +151,5 @@ module.exports = {
     getAllMovies,
     updateMovie,
     deleteMovie,
-    getMostViewed 
+   
 };

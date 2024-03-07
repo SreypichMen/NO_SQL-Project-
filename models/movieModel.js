@@ -42,6 +42,8 @@ const movieSchema = mongoose.Schema({
         firstname: String,  
        
     }], 
+    rate:{},
+    
     averageRate: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "rate"
