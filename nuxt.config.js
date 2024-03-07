@@ -42,8 +42,31 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          required: true,
+          maxAge: 86400, //in second
+          autoLogout: true,
+          type: false,
+        },
 
+        user: {
+          property: false, //if status is error it's mean token is not valid
+        },
+
+        //endpoints first login --> user, after logged user request every time
+        endpoints: {
+         login: { url: 'http://localhost:3001/auth/login', method: 'post' },//login to get token
+          user: { url: 'http://localhost:3001/auth/me', method: 'get' }//auto request to backend as a verification token is valid
+          // logout: { url: 'http://localhost:3001/api/user/logout', method: 'post' },
+        },
+      },
+    },
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
