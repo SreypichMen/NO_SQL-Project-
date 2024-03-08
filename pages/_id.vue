@@ -14,7 +14,7 @@
                   <h3>{{ movieData.title }}</h3>
                 </v-col>
               </v-row>
-              <h5>Rate: {{ movieData.averageRate }} <span class="mdi mdi-star"></span></h5>
+              <h5>Rate: {{ movieData.averageRate.toFixed(2) }} <span class="mdi mdi-star"></span></h5>
               <v-row class="mt-1">
                 <v-chip v-for="(kind, index) in movieData.kind" :key="index" class="ma-2" color="primary" small outlined>{{ kind }}</v-chip>
                 <v-chip class="ma-2" color="deep-orange darken-2" outlined  small >{{ movieData.year }} </v-chip> 

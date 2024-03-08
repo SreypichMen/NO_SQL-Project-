@@ -3,38 +3,73 @@
     <v-row>
       <v-col>
         <v-navigation-drawer
-     
-     fixed
-     app 
-     style="background: rgba(255, 255, 255, 0.89);"
-    
-    zoom="80%"
-   >
-     <div class="mt-10" >
-       <v-row>
-         <v-col align="center">
-             <img class="img_logo" src="~/assets/logo-transparent-png.png">
-         </v-col>
-       </v-row>
-      
-       <v-row>
-         <v-col align="start" class="ml-6">  <div><h4>Movie Filter</h4> </div>
-         </v-col>
-       </v-row>
-       <v-row>
+        fixed
+          app
+          style="background: rgba(255, 255, 255, 0.89);"
+          zoom="80%"
+        >
+          <div class="mt-10">
+            <v-row>
+              <v-col align="center">
+                <img class="img_logo" src="~/assets/logo-transparent-png.png">
+              </v-col>
+            </v-row>
+
+            <v-row>
               <v-col align="start" class="ml-6">
-                <v-select v-model="selectedGenre" :items="genres" label="Genre"></v-select>
+                <div><h4>Movie Filter</h4></div>
               </v-col>
             </v-row>
             <v-row>
-              <v-col align="start" class="ml-6">
-                <v-select v-model="selectedYear" :items="years" label="Year"></v-select>
+              <v-col align="start" class="mx-4">
+                <v-select v-model="selectedGenre" :items="genres" label="Genre">
+                  <!-- Clear Genre Filter Button -->
+                  <template v-slot:append>
+                    <v-btn v-if="selectedGenre" @click="clearGenreFilter" icon>
+                      <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-select>
               </v-col>
             </v-row>
-     </div>
-     
-    
-   </v-navigation-drawer>
+            <v-row>
+              <v-col align="start" class="mx-4">
+                <v-select v-model="selectedYear" :items="years" label="Year">
+                  <!-- Clear Year Filter Button -->
+                  <template v-slot:append>
+                    <v-btn v-if="selectedYear" @click="clearYearFilter" icon>
+                      <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col align="start" class="mx-4">
+                <v-select v-model="selectedRateRange" :items="rateRanges" label="Average Rate">
+                  <!-- Clear Rate Filter Button -->
+                  <template v-slot:append>
+                    <v-btn v-if="selectedRateRange" @click="clearRateFilter" icon>
+                      <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-select>
+              </v-col>
+            </v-row>
+            <!-- Clear Filter Button -->
+            <v-row>
+              <v-col align="center" class="mx-4">
+                <v-btn @click="clearFilters" color="error" dark>Clear All Filters</v-btn>
+              </v-col>
+            </v-row>
+            <div style="flex: 1;margin-top: 120%;"></div> 
+            <v-row>
+            <v-col align="center" class="mx-4 mt-15">
+              <v-btn @click="logout" outlined color="blue" dark>Logout</v-btn>
+            </v-col>
+          </v-row>
+          </div>
+        </v-navigation-drawer>
       </v-col>
       <v-col cols="12">
         <v-container>
@@ -44,11 +79,11 @@
             </v-col>
           </v-row>
           <v-row v-show="$auth.loggedIn">
-          <v-col align="end">
-            <p style="font-size: 16px;">Welcome <span v-if="$auth.user && $auth.user.data && $auth.user.data.firstname" style="font-weight: bold; color: blue">{{$auth.user.data.firstname}}</span>!</p>
-          </v-col>
-        </v-row>
-          <v-row >
+            <v-col align="end">
+              <p style="font-size: 16px;">Welcome <span v-if="$auth.user && $auth.user.data && $auth.user.data.firstname" style="font-weight: bold; color: blue">{{$auth.user.data.firstname}}</span>!</p>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col align="start">
               <!-- <h2><i>A Place You Can Find Good Movies to Watch</i></h2> -->
             </v-col>
@@ -75,7 +110,7 @@
                               <v-btn :to="`/${movie._id}`" rounded small color="primary" dark>View</v-btn>
                             </v-col>
                           </v-row>
-                          <h5>Rate: {{ movie.averageRate }} <span class="mdi mdi-star"></span></h5>
+                          <h5>Rate: {{ movie.averageRate.toFixed(2) }} <span class="mdi mdi-star"></span></h5>
                           <v-row class="mt-1">
                             <v-chip v-for="(kind, index) in movie.kind" :key="index" class="ma-2" color="primary" outlined small>{{ kind }}</v-chip>
                             <v-chip class="ma-2" color="deep-orange darken-2" outlined small>{{ movie.year }}</v-chip>
@@ -100,7 +135,6 @@
                 </v-card>
               </v-col>
             </v-row>
-           
             <v-divider></v-divider>
             <v-row class="mx-2">
               <v-col align="center">
@@ -110,9 +144,6 @@
                   circle
                 ></v-pagination>
               </v-col>
-             
-               
-          
             </v-row>
           </v-card>
           <v-card v-else class="mt-2 mb-2" outlined>
@@ -141,12 +172,13 @@ export default {
       movies: [],
       search: '',
       page: 1, 
-      // Add itemsPerPage property to define the number of movies per page
       itemsPerPage: 10, 
       selectedGenre: '',
       selectedYear: '',
-      genres: ['Action', 'Comedy', 'Drama', 'Horror', 'Science Fiction'],
-      years: [2022, 2021, 2020, 2019, 2018] // Assuming available years for filtering
+      genres: [], // Initialize genres property
+      years: [],   // Initialize years property
+      rateRanges: ['0-1', '1-2', '2-3', '3-4', '4-5'],
+      selectedRateRange: ''
     };
   },
   computed: {
@@ -162,51 +194,103 @@ export default {
     },
     // Apply search filter to movies array
     filteredMovies() {
-  let filtered = this.movies;
+      let filtered = this.movies;
 
-  // Apply search filter
-  if (this.search.trim() !== '') {
-    const searchTerm = this.search.toLowerCase().trim();
-    filtered = filtered.filter(movie => {
-      return movie.title.toLowerCase().includes(searchTerm) ||
-        movie.director.firstname.toLowerCase().includes(searchTerm) ||
-        movie.director.lastname.toLowerCase().includes(searchTerm) ||
-        movie.Act.some(actor => actor.firstname.toLowerCase().includes(searchTerm) ||
-          actor.lastname.toLowerCase().includes(searchTerm));
-    });
-  }
+      // Apply search filter
+      if (this.search.trim() !== '') {
+        const searchTerm = this.search.toLowerCase().trim();
+        filtered = filtered.filter(movie => {
+          return movie.title.toLowerCase().includes(searchTerm) ||
+            movie.director.firstname.toLowerCase().includes(searchTerm) ||
+            movie.director.lastname.toLowerCase().includes(searchTerm) ||
+            movie.Act.some(actor => actor.firstname.toLowerCase().includes(searchTerm) ||
+              actor.lastname.toLowerCase().includes(searchTerm));
+        });
+      }
 
-  // Apply genre filter
-  if (this.selectedGenre) {
-    filtered = filtered.filter(movie => movie.genre === this.selectedGenre);
-  }
+      // Apply genre filter
+      if (this.selectedGenre) {
+        filtered = filtered.filter(movie => movie.kind.includes(this.selectedGenre));
+      }
 
-  // Apply year filter
-  if (this.selectedYear) {
-    filtered = filtered.filter(movie => movie.year === this.selectedYear);
-  }
+      // Apply year filter
+      if (this.selectedYear) {
+        filtered = filtered.filter(movie => movie.year === this.selectedYear);
+      }
+      // Apply rate filter
+      if (this.selectedRateRange) {
+        const [minRate, maxRate] = this.selectedRateRange.split('-').map(Number);
+        filtered = filtered.filter(movie => {
+          return movie.averageRate >= minRate && movie.averageRate <= maxRate;
+        });
+      }
 
-  return filtered;
-}
-
-
+      return filtered;
+    }
   },
   created() {
     this.fetchMovies();
   },
   methods: {
-    async fetchMovies() {
-      try {
-        const response = await fetch('http://localhost:3001/api/movie');
-        const data = await response.json();
-        this.movies = data;
-        
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      }
-    },
+    // Inside the fetchMovies method
+async fetchMovies() {
+  try {
+    const response = await fetch('http://localhost:3001/api/movie');
+    const data = await response.json();
+    this.movies = data;
+
+    // Extract unique genres from movies
+    const genresSet = new Set();
+   
+    data.forEach(movie => {
+      movie.kind.forEach(genre => {
+        const lowercaseGenre = genre.toLowerCase().trim(); // Convert to lowercase
+        // Check if a genre with the same lowercase spelling already exists in the set
+        if (!Array.from(genresSet).some(existingGenre => existingGenre.toLowerCase() === lowercaseGenre)) {
+          genresSet.add(genre);
+        }
+      });
+    });
+    this.genres = Array.from(genresSet);
+
+    // Extract unique years from movies
+    const yearsSet = new Set();
+    data.forEach(movie => yearsSet.add(movie.year));
+    this.years = Array.from(yearsSet);
+
+  } catch (error) {
+    console.error('Error fetching movies:', error);
+  }
+},
+
     getActors(actors) {
       return actors.map(actor => `${actor.firstname} ${actor.lastname}`).join(', ');
+    },
+    clearFilters() {
+      this.selectedGenre = '';
+      this.selectedYear = '';
+      this.selectedRateRange= '';
+      this.search = '';
+      this.page = 1;
+    },
+    clearGenreFilter() {
+      this.selectedGenre = '';
+    },
+    clearYearFilter() {
+      this.selectedYear = '';
+    }, 
+    clearRateFilter() {
+      this.selectedRateRange = '';
+    }, 
+    async logout() {
+      try {
+        await this.$auth.logout();
+        // Redirect the user to the login page or any other page
+        this.$router.push('/login');
+      } catch (error) {
+        // Handle logout error, if any
+        console.error('Error logging out:', error);
+      }
     }
   },
   watch: {
@@ -216,6 +300,8 @@ export default {
   }
 }
 </script>
+
+
 
 <style scoped>
 h2 {
