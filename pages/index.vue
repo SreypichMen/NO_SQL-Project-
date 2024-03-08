@@ -266,7 +266,7 @@ export default {
     getMovieData(){
     const axios = require('axios');
     axios
-        .get(`http://localhost:3001/api/movie`)
+        .get(`https://no-sql-project.onrender.com/api/movie`)
         .then((res) => {
             console.log(res.data); // Log the response data
             this.products = res.data;
@@ -283,7 +283,7 @@ async save() {
     if (this.file) {
       let formData = new FormData();
       formData.append('file', this.file);
-      const res = await this.$axios.post('http://localhost:3001/upload-image', formData);
+      const res = await this.$axios.post('https://no-sql-project.onrender.com/upload-image', formData);
       imageData = res.data;
     }
 
@@ -300,7 +300,7 @@ async save() {
       movie_thumbnail: imageData.data
     };
 
-    await this.$axios.post('http://localhost:3001/api/movie/add', data);
+    await this.$axios.post('https://no-sql-project.onrender.com/api/movie/add', data);
 
     this.status = 'OK';
     this.message = 'Success';

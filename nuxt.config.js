@@ -68,8 +68,8 @@ export default {
 
             //endpoints first login --> user, after logged user request every time
             endpoints: {
-		         login: { url: 'http://localhost:3001/auth/login', method: 'post' },//login to get token
-              user: { url: 'http://localhost:3001/auth/me', method: 'get' }//auto request to backend as a verification token is valid
+		         login: { url: 'https://no-sql-project.onrender.com/auth/login', method: 'post' },//login to get token
+              user: { url: 'https://no-sql-project.onrender.com/auth/me', method: 'get' }//auto request to backend as a verification token is valid
               // logout: { url: 'http://localhost:3001/api/user/logout', method: 'post' },
             },
           },

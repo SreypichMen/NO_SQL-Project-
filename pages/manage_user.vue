@@ -113,7 +113,7 @@ export default {
     methods: {
         fetchData() {
             // Make a GET request to your API endpoint
-            axios.get('http://localhost:3001/rate/')
+            axios.get('https://no-sql-project.onrender.com/rate/')
                 .then(response => {
                     // Update products with the received data
                     this.products = response.data.allRates;

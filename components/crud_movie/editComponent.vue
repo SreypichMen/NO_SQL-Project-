@@ -124,7 +124,7 @@ export default {
         const axios = require('axios');
       // let products=[]
             axios
-                .get(`http://localhost:3001/api/movie/${this.id}`)
+                .get(`https://no-sql-project.onrender.com/api/movie/${this.id}`)
                 .then((res) => {
 
                   this.movie= res.data
@@ -144,7 +144,7 @@ export default {
     if (this.file) {
       let formData = new FormData();
       formData.append('file', this.file);
-      const res = await this.$axios.post('http://localhost:3001/upload-image', formData);
+      const res = await this.$axios.post('https://no-sql-project.onrender.com/upload-image', formData);
       image_url = res.data.data; // Extracting the URL string from the response data object
     }
     let data = {
@@ -159,7 +159,7 @@ export default {
       Act: this.movie.Act,
       movie_thumbnail: image_url // Set the movie thumbnail to the extracted URL string
     };
-    await this.$axios.put(`http://localhost:3001/api/movie/${this.id}`, data);
+    await this.$axios.put(`https://no-sql-project.onrender.com/api/movie/${this.id}`, data);
     this.$nuxt.$emit('getProduct');
     this.status = 'OK';
     this.message = 'Success';
