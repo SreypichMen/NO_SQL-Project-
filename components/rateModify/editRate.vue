@@ -88,7 +88,7 @@ export default {
 async updateRateAndComment() {
   try {
     // Make a PUT request to update the rate and comment
-    const response = await axios.put(`http://localhost:3001/rate/${this.id}`, { rate: this.rate, comment: this.comment });
+    const response = await axios.put(`https://no-sql-project.onrender.com/rate/${this.id}`, { rate: this.rate, comment: this.comment });
     // Close the dialog after successful update
     this.dialog = false;
     console.log('Rate and comment updated successfully');

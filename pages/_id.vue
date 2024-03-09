@@ -67,7 +67,7 @@ export default {
   methods: {
     fetchMovieData() {
       // Make an HTTP request to fetch movie data from your API endpoint
-      fetch(`http://localhost:3001/api/movie/${this.$route.params.id}`)
+      fetch(`https://no-sql-project.onrender.com/api/movie/${this.$route.params.id}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');

@@ -155,7 +155,7 @@ export default {
   methods: {
     async fetchRates() {
       try {
-        const response = await axios.get(`http://localhost:3001/api/movie/${this.$route.params.id}`);
+        const response = await axios.get(`https://no-sql-project.onrender.com/api/movie/${this.$route.params.id}`);
         this.allRates = response.data;
       } catch (error) {
         console.error('Error fetching rates:', error);
@@ -171,7 +171,7 @@ export default {
         };
 
         // Send POST request to add a new comment
-        const response = await axios.post(`http://localhost:3001/rate/add`, postData);
+        const response = await axios.post(`https://no-sql-project.onrender.com/rate/add`, postData);
         console.log('Comment posted successfully');
         this.dialog = false;
 

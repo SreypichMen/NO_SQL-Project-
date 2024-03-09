@@ -62,8 +62,8 @@
                 <v-btn @click="clearFilters" color="error" dark>Clear All Filters</v-btn>
               </v-col>
             </v-row>
-            <div style="flex: 1;margin-top: 120%;"></div> 
-            <v-row>
+            <div style="flex: 1;margin-top: 40%;"></div> 
+            <v-row v-show="$auth.loggedIn">
             <v-col align="center" class="mx-4 mt-15">
               <v-btn @click="logout" outlined color="blue" dark>Logout</v-btn>
             </v-col>
@@ -161,12 +161,10 @@
 </template>
 
 <script>
-import FilterComponent from '~/components/filterMovie.vue';
+
 export default {
   name: 'IndexPage',
-  components: {
-    FilterComponent
-  },
+
   data() {
     return {
       movies: [],
@@ -235,7 +233,7 @@ export default {
     // Inside the fetchMovies method
 async fetchMovies() {
   try {
-    const response = await fetch('http://localhost:3001/api/movie');
+    const response = await fetch('https://no-sql-project.onrender.com/api/movie');
     const data = await response.json();
     this.movies = data;
 
