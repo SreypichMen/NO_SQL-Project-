@@ -237,7 +237,7 @@ export default {
       movies: [],
       search: '',
       page: 1, 
-      itemsPerPage: 9, 
+      itemsPerPage: 10, 
       selectedGenre: '',
       selectedYear: '',
       selectedNat:'',
