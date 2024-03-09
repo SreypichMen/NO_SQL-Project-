@@ -1,14 +1,20 @@
 <template>
   <div>
     <v-container>
-      <v-row v-if="movieData">
+      
+    <v-breadcrumbs :items="items">
+      <template v-slot:divider>
+        <v-icon>mdi-chevron-right</v-icon>
+      </template>
+    </v-breadcrumbs>
+      <v-row v-if="movieData" >
       <v-col cols="12">
         <div class="border"> 
-          <v-row class="mb-2">
-            <v-col cols="5" align="end" >
+          <v-row class="mb-2" >
+            <v-col cols="5" align="end" sm="12" md="6" lg="6">
               <v-img class="mx-auto" max-width="220" height="290" :src="movieData.movie_thumbnail"></v-img>
             </v-col>
-            <v-col cols="7" align="start">
+            <v-col cols="7" align="start" sm="12" md="6" lg="6">
               <v-row>
                 <v-col>
                   <h3>{{ movieData.title }}</h3>
@@ -58,7 +64,20 @@ export default {
   data() {
     return {
       movieData: null,
-      error: null
+      error: null, 
+      items: [
+        {
+          text: 'Home',
+          disabled: false,
+          href: '/',
+        },
+        {
+          text: this.movieData ? this.movieData.title : '',
+          disabled: false,
+          href: this.movieData ? `/movies/${this.movieData.id}` : '/',
+       },
+      
+      ],
     };
   },
   mounted() {

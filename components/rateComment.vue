@@ -114,7 +114,7 @@
         <v-col v-if="$auth.loggedIn && rate.user._id === $auth.user.data._id" cols="2" align="end">
           <v-row class="pa-2"> <editRate :id="rate._id"  :movieId="rate.movie_id" />| <deleteRate :id="rate._id"  :movieId="rate.movie_id" /></v-row>
         </v-col>
-        <div style="border-bottom:1px solid #D3D3D3; width:100%; margin-top: -20px;margin-left: 10px;padding-bottom: 5px;"></div>
+        <div style="border-bottom:1px solid #D3D3D3; width:100%; margin-top: -15px;margin-left: 10px;padding-bottom: 5px;"></div>
      </v-row>    
     </v-container>
   </div>

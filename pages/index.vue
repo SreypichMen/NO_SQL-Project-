@@ -20,9 +20,9 @@
                 <div><h4>Movie Filter</h4></div>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row  class="d-md-none">
               <v-col align="start" class="mx-4">
-                <v-select v-model="selectedGenre" :items="genres" label="Genre">
+                <v-select v-model="selectedGenre" :items="genres" label="Genre" >
                   <!-- Clear Genre Filter Button -->
                   <template v-slot:append>
                     <v-btn v-if="selectedGenre" @click="clearGenreFilter" icon>
@@ -33,7 +33,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col align="start" class="mx-4">
+              <v-col align="start" class="mx-7">
                 <v-select v-model="selectedYear" :items="years" label="Year">
                   <!-- Clear Year Filter Button -->
                   <template v-slot:append>
@@ -45,7 +45,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col align="start" class="mx-4">
+              <v-col align="start" class="mx-7">
                 <v-select v-model="selectedRateRange" :items="rateRanges" label="Average Rate">
                   <!-- Clear Rate Filter Button -->
                   <template v-slot:append>
@@ -58,12 +58,12 @@
             </v-row>
             <!-- Clear Filter Button -->
             <v-row>
-              <v-col align="center" class="mx-4">
-                <v-btn @click="clearFilters" color="error" dark>Clear All Filters</v-btn>
+              <v-col align="center" class="mx-7">
+                <v-btn @click="clearFilters" color="error"  plain dark><v-icon>mdi mdi-filter-remove-outline</v-icon>Clear Filters</v-btn>
               </v-col>
             </v-row>
-            <div style="flex: 1;margin-top: 40%;"></div> 
-            <v-row v-show="$auth.loggedIn">
+            <div ></div> 
+            <v-row v-show="$auth.loggedIn" >
             <v-col align="center" class="mx-4 mt-15">
               <v-btn @click="logout" outlined color="blue" dark>Logout</v-btn>
             </v-col>
@@ -91,18 +91,56 @@
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details dense filled outlined solo></v-text-field>
             </v-col>
           </v-row>
-          <v-card v-if="slicedMovies.length > 0" class="mt-2 mb-2" outlined>
-            <v-row class="pa-4">
-              <v-col cols="6" v-for="movie in slicedMovies" :key="movie._id">
-                <v-card class="mx-auto" max-width="800" outlined>
-                  <nuxt-link :to="`/${movie._id}`" style="text-decoration: none; color: #0d324d;">
-                    <div class="border">
-                      <v-row>
-                        <v-col cols="4">
-                          <v-img :src="movie.movie_thumbnail" max-width="180" height="190" rounded-lg></v-img>
-                        </v-col>
-                        <v-col cols="8" align="start">
-                          <v-row>
+          <v-row class=" d-lg-none">
+            <v-col cols="1">
+            
+          </v-col>
+            <v-col cols="3">
+              <v-select v-model="selectedGenre" :items="genres" label="Genre" >
+                  <!-- Clear Genre Filter Button -->
+                  <template v-slot:append>
+                    <v-btn v-if="selectedGenre" @click="clearGenreFilter" icon>
+                      <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select v-model="selectedYear" :items="years" label="Year">
+                  <!-- Clear Year Filter Button -->
+                  <template v-slot:append>
+                    <v-btn v-if="selectedYear" @click="clearYearFilter" icon>
+                      <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select v-model="selectedRateRange" :items="rateRanges" label="Average Rate">
+                  <!-- Clear Rate Filter Button -->
+                  <template v-slot:append>
+                    <v-btn v-if="selectedRateRange" @click="clearRateFilter" icon>
+                      <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-select>
+            </v-col>
+            <v-col cols="2" align="start">
+              <v-btn @click="clearFilters" fab color="error" icon ><v-icon>mdi mdi-backspace-outline</v-icon></v-btn>
+          </v-col>
+          </v-row>
+         <v-card v-if="slicedMovies.length > 0" class="mt-2 mb-2" outlined>
+        <v-row class="pa-4">
+          <v-col v-for="movie in slicedMovies" :key="movie._id" cols="12" sm="12" md="6" lg="6">
+        <v-card class="mx-auto" hight="auto" outlined style="text-overflow: hidden;">
+          
+            <div class="border">
+              <v-row>
+                <v-col cols="5" sm="5">
+                  <v-img :src="movie.movie_thumbnail" max-width="180" height="190" rounded-lg></v-img>
+                </v-col>
+                <v-col cols="7" sm="7">
+                  <v-row>
                             <v-col align="start">
                               <h3>{{ movie.title }}</h3>
                             </v-col>
@@ -110,42 +148,46 @@
                               <v-btn :to="`/${movie._id}`" rounded small color="primary" dark>View</v-btn>
                             </v-col>
                           </v-row>
-                          <h5>Rate: {{ movie.averageRate.toFixed(2) }} <span class="mdi mdi-star"></span></h5>
-                          <v-row class="mt-1">
-                            <v-chip v-for="(kind, index) in movie.kind" :key="index" class="ma-2" color="primary" outlined small>{{ kind }}</v-chip>
-                            <v-chip class="ma-2" color="deep-orange darken-2" outlined small>{{ movie.year }}</v-chip>
-                            <v-chip class="ma-2" color="teal darken-3" outlined small>{{ movie.duration }} mn</v-chip>
-                          </v-row>
-                          <v-row>
-                            <v-col>
-                              <h4>Director:</h4>
-                            </v-col>
-                            <v-col align="start"><p>{{ movie.director.firstname }} {{ movie.director.lastname }}</p></v-col>
-                          </v-row>
-                          <v-row style="margin-top: -45px;">
-                            <v-col>
-                              <h4>Actors:</h4>
-                            </v-col>
-                            <v-col align="start"><p>{{ getActors(movie.Act) }}</p></v-col>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-                    </div>
-                  </nuxt-link>
-                </v-card>
-              </v-col>
-            </v-row>
-            <v-divider></v-divider>
-            <v-row class="mx-2">
-              <v-col align="center">
-                <v-pagination
-                  v-model="page"
-                  :length="totalPages"
-                  circle
-                ></v-pagination>
-              </v-col>
-            </v-row>
-          </v-card>
+                  <h5>Rate: {{ movie.averageRate.toFixed(2) }} <span class="mdi mdi-star"></span></h5>
+                  <v-row class="mt-1">
+                    <v-chip v-for="(kind, index) in movie.kind" :key="index" class="ma-2" color="primary" outlined small>{{ kind }}</v-chip>
+                    <v-chip class="ma-2" color="deep-orange darken-2" outlined small>{{ movie.year }}</v-chip>
+                    <v-chip class="ma-2" color="teal darken-3" outlined small>{{ movie.duration }} mn</v-chip>
+                  </v-row>
+                  <v-row style="margin-top: -10px;">
+                    <v-col >
+                      <h4>Director:</h4>
+                    </v-col>
+                    <v-col align="start">
+                      <p>{{ movie.director.firstname }} {{ movie.director.lastname }}</p>
+                    </v-col>
+                  </v-row>
+                  <v-row style="margin-top: -35px;">
+                    <v-col >
+                      <h4>Actors:</h4>
+                    </v-col>
+                    <v-col align="start" style="overflow: hidden; height:50px">
+                      <p style=" overflow: hidden;">{{ getActors(movie.Act) }}</p>
+                    </v-col>
+                  </v-row>
+
+                </v-col>
+
+              </v-row>
+            </div>
+        
+        </v-card>
+    </v-col>
+
+  </v-row>
+  <v-divider></v-divider>
+  <v-row class="mx-2">
+    <v-col align="center">
+      <v-pagination v-model="page" :length="totalPages" circle></v-pagination>
+    </v-col>
+  </v-row>
+      </v-card>
+
           <v-card v-else class="mt-2 mb-2" outlined>
             <v-row class="pa-4">
               <v-col align="center">
@@ -170,7 +212,7 @@ export default {
       movies: [],
       search: '',
       page: 1, 
-      itemsPerPage: 10, 
+      itemsPerPage: 9, 
       selectedGenre: '',
       selectedYear: '',
       genres: [], // Initialize genres property
