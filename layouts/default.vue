@@ -75,9 +75,13 @@
             <v-list-item-title />User
           </v-list-item-content>
         </v-list-item>
-        
-      </v-list>
      
+      </v-list>
+      <v-row style="position:absolute; bottom:20px;left:65px">
+      <v-col align="center" class="mx-4 mt-15">
+              <v-btn @click="logout" outlined color="blue" dark>Logout</v-btn>
+            </v-col>
+    </v-row>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app v-show="$auth.loggedIn">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -126,6 +130,18 @@ export default {
       right: true,
       rightDrawer: false,
       // title: 'Vuetify.js',
+    }
+  },
+  methods: {
+    async logout() {
+      try {
+        await this.$auth.logout();
+        // Redirect the user to the login page or any other page
+        this.$router.push('/login');
+      } catch (error) {
+        // Handle logout error, if any
+        console.error('Error logging out:', error);
+      }
     }
   },
 }
