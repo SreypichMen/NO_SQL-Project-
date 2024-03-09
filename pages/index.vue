@@ -20,8 +20,8 @@
                 <div><h4>Movie Filter</h4></div>
               </v-col>
             </v-row>
-            <v-row  class="d-md-none">
-              <v-col align="start" class="mx-4">
+            <v-row  >
+              <v-col align="start" class="mx-7">
                 <v-select v-model="selectedGenre" :items="genres" label="Genre" >
                   <!-- Clear Genre Filter Button -->
                   <template v-slot:append>
@@ -33,6 +33,18 @@
               </v-col>
             </v-row>
             <v-row>
+              <v-col align="start" class="mx-7">
+                <v-select v-model="selectedNat" :items="nat" label="Nation">
+    <!-- Clear Nation Filter Button -->
+                <template v-slot:append>
+                    <v-btn v-if="selectedNat" @click="clearNatFilter" icon>
+                        <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                </template>
+            </v-select>
+              </v-col>
+            </v-row>
+            <v-row >
               <v-col align="start" class="mx-7">
                 <v-select v-model="selectedYear" :items="years" label="Year">
                   <!-- Clear Year Filter Button -->
@@ -57,18 +69,6 @@
               </v-col>
             </v-row>
             <!-- Clear Filter Button -->
-            <v-row>
-              <v-col align="center" class="mx-7">
-              <v-select v-model="selectedGenre" :items="genres" label="Genre" >
-                  <!-- Clear Genre Filter Button -->
-                  <template v-slot:append>
-                    <v-btn v-if="selectedGenre" @click="clearGenreFilter" icon>
-                      <v-icon color="grey">mdi-close-circle</v-icon>
-                    </v-btn>
-                  </template>
-                </v-select>
-            </v-col>
-            </v-row>
             <v-row>
               <v-col align="center" class="mx-7">
                 <v-btn @click="clearFilters" color="error"  plain dark><v-icon>mdi mdi-filter-remove-outline</v-icon>Clear Filters</v-btn>
@@ -107,10 +107,10 @@
             </v-col>
           </v-row>
           <v-row class=" d-lg-none">
-            <v-col cols="1">
+            <v-col cols="2">
             
           </v-col>
-            <v-col cols="3">
+            <v-col cols="2">
               <v-select v-model="selectedGenre" :items="genres" label="Genre" >
                   <!-- Clear Genre Filter Button -->
                   <template v-slot:append>
@@ -120,7 +120,17 @@
                   </template>
                 </v-select>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="2">
+              <v-select v-model="selectedNat" :items="nat" label="Nation">
+    <!-- Clear Nation Filter Button -->
+                <template v-slot:append>
+                    <v-btn v-if="selectedNat" @click="clearNatFilter" icon>
+                        <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                </template>
+            </v-select>
+            </v-col>
+            <v-col cols="2">
               <v-select v-model="selectedYear" :items="years" label="Year">
                   <!-- Clear Year Filter Button -->
                   <template v-slot:append>
@@ -140,7 +150,7 @@
                   </template>
                 </v-select>
             </v-col>
-            <v-col cols="2" align="start">
+            <v-col cols="1" align="start">
               <v-btn @click="clearFilters" fab color="error" icon ><v-icon>mdi mdi-backspace-outline</v-icon></v-btn>
           </v-col>
           </v-row>
@@ -230,8 +240,10 @@ export default {
       itemsPerPage: 9, 
       selectedGenre: '',
       selectedYear: '',
+      selectedNat:'',
       genres: [], // Initialize genres property
       years: [],   // Initialize years property
+      nat:[],
       rateRanges: ['0-1', '1-2', '2-3', '3-4', '4-5'],
       selectedRateRange: ''
     };
@@ -279,6 +291,9 @@ export default {
           return movie.averageRate >= minRate && movie.averageRate <= maxRate;
         });
       }
+      if (this.selectedNat) {
+            filtered = filtered.filter(movie => movie.natio === this.selectedNat);
+        }
 
       return filtered;
     }
@@ -313,6 +328,11 @@ async fetchMovies() {
     data.forEach(movie => yearsSet.add(movie.year));
     this.years = Array.from(yearsSet);
 
+    // Extract unique nations from movies (case-insensitive)
+    const natSet = new Set();
+    data.forEach(movie => natSet.add(movie.natio.toUpperCase())); // Convert to lowercase
+    this.nat = Array.from(natSet);
+
   } catch (error) {
     console.error('Error fetching movies:', error);
   }
@@ -325,7 +345,7 @@ async fetchMovies() {
       this.selectedGenre = '';
       this.selectedYear = '';
       this.selectedRateRange= '';
-      this.search = '';
+      this.selectedNat='';
       this.page = 1;
     },
     clearGenreFilter() {
@@ -336,7 +356,9 @@ async fetchMovies() {
     }, 
     clearRateFilter() {
       this.selectedRateRange = '';
-    }, 
+    }, clearNatFilter() {
+      this.selectedNat = '';
+    },
     async logout() {
       try {
         await this.$auth.logout();
