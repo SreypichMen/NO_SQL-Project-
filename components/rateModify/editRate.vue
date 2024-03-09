@@ -94,11 +94,12 @@ async updateRateAndComment() {
     console.log('Rate and comment updated successfully');
     
     // Fetch the updated data to reload
-    window.location.reload();
+    this.$router.go(); // Reload the current route
   } catch (error) {
     console.error('Error updating rate and comment:', error);
   }
 },
+
 
   },
 };

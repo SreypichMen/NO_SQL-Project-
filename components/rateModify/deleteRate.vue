@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="430px">
+    <v-dialog v-model="dialog" max-width="510px">
       <template v-slot:activator="{ on, attrs }">
       
         <v-btn small color="red"  v-bind="attrs" v-on="on" plain>Delete</v-btn>
@@ -7,7 +7,7 @@
   
       <v-card>
         <v-card-title class="text-h7"
-          >Are you sure you want to your comment?</v-card-title
+          >Are you sure you want to delete to your comment?</v-card-title
         >
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -37,8 +37,8 @@
         
         this.isLoading = false
         this.dialog = false
-         // Fetch the updated data to reload
-        window.location.reload();
+        // Fetch the updated data to reload
+       this.$router.go(); // Reload the current route
       })
       },
     },
