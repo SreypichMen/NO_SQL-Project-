@@ -1,104 +1,100 @@
-<template >
+<template>
     <div>
-         <div class="box" v-show="!$auth.loggedIn">
-            <v-card class=" mb-7">
+        <div class="box" v-show="!$auth.loggedIn">
+            <v-card class="mb-7">
                 <v-row>
                     <v-col class="pa-6 pr-5 d-none d-md-block" md="6">
                         <img style="height:450px; width:350px;margin-left: 10px;" src="~/assets/Sign in-rafiki.png"></img>
                     </v-col>
-                    <v-col  md="6" style="padding: 40px">
+                    <v-col md="6" style="padding: 40px">
                         <center>
-                    <h2>Login</h2> 
-                    <br>
-                    </center>   
-                    <div>
-                        <label for="Phone"><b>Email</b></label>
-                        <div style="position: relative">
-                            <v-icon style="position: absolute; top: 6px; left: 15px">mdi-mail</v-icon>
-                            
-                            <input class="input" placeholder="Enter your email"  v-model="email" required>
+                            <h2>Login</h2> 
+                            <br>
+                        </center>   
+                        <div>
+                            <label for="Phone"><b>Email</b></label>
+                            <div style="position: relative">
+                                <v-icon style="position: absolute; top: 6px; left: 15px">mdi-mail</v-icon>
+                                <input class="input" placeholder="Enter your email"  v-model="email" required>
+                            </div>
                         </div>
-                    </div>
                         <br>
                         <label for="psw"><b>Password</b></label>
                         <div style="position: relative">
-                                <v-icon style="position: absolute; top: 10px; left: 15px;" >mdi-lock</v-icon>
-                                <input v-model="password" type="password" class="input" placeholder="Enter Password" name="psw" required></input>
-             
-                            </div>
-                            <div><button @click="userLogin()"  type="submit" style="background-color:green; color: white;font-weight: bold; border-radius: 20px ; height: 40px; width: 100% ; margin-top: 30px;">LOGIN</button></div>
-                       
-                     
-                         <div>
+                            <v-icon style="position: absolute; top: 10px; left: 15px;" >mdi-lock</v-icon>
+                            <input v-model="password" type="password" class="input" placeholder="Enter Password" name="psw" required></input>
+                        </div>
+                        <div><button @click="userLogin()"  type="submit" style="background-color:green; color: white;font-weight: bold; border-radius: 20px ; height: 40px; width: 100% ; margin-top: 30px;">LOGIN</button></div>
+                        <div>
                             <center>
                                 <nuxt-link to="/register"><h5 class="register">Create your account -></h5></nuxt-link>
-                               
                             </center>
-                           </div>
+                        </div>
+                        <div v-if="login_response" class="error-message">{{ login_response }}</div>
                     </v-col>
                 </v-row>
-               
-              </v-card>
-         </div>
-         <v-container v-show="$auth.loggedIn" class="mx-auto">
-        <v-row>
-         <v-col align="center">
-            <h3>You have successfully login!</h3>
-         </v-col>
-        </v-row>
-        <v-row>
-         <v-col align="center">
-            <nuxt-link to="/">Back to homepage</nuxt-link>
-         </v-col>
-        </v-row>
-        <v-row>
-         <v-col align="center">
-            <img src="~/assets/Capture.PNG">
-         </v-col>
-        </v-row>
-           
-      </v-container>
+            </v-card>
+        </div>
+        <v-container v-show="$auth.loggedIn" class="mx-auto">
+            <v-row>
+                <v-col align="center">
+                    <h3>You have successfully logged in!</h3>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col align="center">
+                    <nuxt-link to="/">Back to homepage</nuxt-link>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col align="center">
+                    <img src="~/assets/Capture.PNG">
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
-   
- </template>
-    <script>
-    export default {
-      data () {
-        return {
-          email: '',
-          password: '',
-          show: 'login',
-          drawer: false, 
-          dialog: false,
-          login_response: '',
-          justify: [
-          'start',
-        ],
-        }
-        
-      },
-            methods: {
-        refresh(){
-        setTimeout(() => {
-        document.location.reload();
-      }, 100
-      ); 
-      },
-        async userLogin() {
-          
-            let response = await this.$auth.loginWith('local', {
-                data: {
-                    email: this.email,
-                    password: this.password
-                },
-            })
-            location.replace('/') 
+</template>
 
-          
+<script>
+export default {
+    data () {
+        return {
+            email: '',
+            password: '',
+            show: 'login',
+            drawer: false, 
+            dialog: false,
+            login_response: '',
+            justify: [
+                'start',
+            ],
+        }
+    },
+    methods: {
+        async userLogin() {
+            try {
+                let response = await this.$auth.loginWith('local', {
+                    data: {
+                        email: this.email,
+                        password: this.password
+                    },
+                });
+                // Redirect user to homepage after successful login
+                location.replace('/');
+            } catch (error) {
+                // Handle login error
+                console.error('Login error:', error);
+                if (error.response && error.response.status === 401) {
+                    this.login_response = 'Invalid email or password';
+                } else {
+                    this.login_response = 'Something went wrong. Please try again later.';
+                }
+            }
+        }
     }
 }
-     }
-  </script>
+</script>
+
     <style scoped>
     
     .box{

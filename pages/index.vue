@@ -63,11 +63,14 @@
               </v-col>
             </v-row>
             <div ></div> 
-            <v-row v-show="$auth.loggedIn" >
+            <center>
+              <v-row v-show="$auth.loggedIn" style="position:absolute; bottom:20px;left:65px">
             <v-col align="center" class="mx-4 mt-15">
               <v-btn @click="logout" outlined color="blue" dark>Logout</v-btn>
             </v-col>
           </v-row>
+            </center>
+            
           </div>
         </v-navigation-drawer>
       </v-col>
