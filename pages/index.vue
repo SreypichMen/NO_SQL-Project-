@@ -263,18 +263,21 @@ export default {
             this.movie.kind.splice(index, 1);
         }
     },
-    getMovieData(){
+    getMovieData() {
     const axios = require('axios');
     axios
         .get(`https://no-sql-project.onrender.com/api/movie`)
         .then((res) => {
             console.log(res.data); // Log the response data
-            this.products = res.data;
+            this.products = res.data.map(movie => ({
+                ...movie,
+                averageRate: movie.averageRate.toFixed(2) // Round to two decimal points
+            }));
         })
         .catch((error) => {
             console.log(error.response);
         });
-}, 
+},
 async save() {
   this.isLoading = true;
 
