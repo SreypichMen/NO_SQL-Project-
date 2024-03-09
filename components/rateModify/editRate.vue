@@ -74,7 +74,7 @@ export default {
   methods: {
     async fetchRates() {
   try {
-    const response = await axios.get(`http://localhost:3001/rate/${this.id}`);
+    const response = await axios.get(`https://no-sql-project.onrender.com/rate/${this.id}`);
     // Assuming that response.data contains the rate and comment
     this.rate = response.data.rate; // Assign rate from response
     this.comment = response.data.comment;
