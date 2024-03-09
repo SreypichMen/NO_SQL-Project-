@@ -59,6 +59,18 @@
             <!-- Clear Filter Button -->
             <v-row>
               <v-col align="center" class="mx-7">
+              <v-select v-model="selectedGenre" :items="genres" label="Genre" >
+                  <!-- Clear Genre Filter Button -->
+                  <template v-slot:append>
+                    <v-btn v-if="selectedGenre" @click="clearGenreFilter" icon>
+                      <v-icon color="grey">mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-select>
+            </v-col>
+            </v-row>
+            <v-row>
+              <v-col align="center" class="mx-7">
                 <v-btn @click="clearFilters" color="error"  plain dark><v-icon>mdi mdi-filter-remove-outline</v-icon>Clear Filters</v-btn>
               </v-col>
             </v-row>
